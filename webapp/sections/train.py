@@ -120,7 +120,7 @@ def object_detection_task():
     stroke_color = '#000'
     bg_color = '#eee'
 
-    class_selected = st.sidebar.selectbox('Class', ('class1','class2', 'class3'))
+    class_selected = st.sidebar.radio('Class', ('class1','class2', 'class3'))
     
     if class_selected =='class1':
         fill_color = 'rgba(255, 0, 0, 0.3)'

@@ -1,3 +1,3 @@
 # sl-aclearn
 
-`Launch`: streamlit run launch_webapp.py 
+`Launch`: streamlit run app.py 
