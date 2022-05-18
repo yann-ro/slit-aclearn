@@ -1,7 +1,7 @@
-import pandas as pd
-from PIL import Image
-import streamlit as st
 from streamlit_drawable_canvas import st_canvas
+import streamlit as st
+from PIL import Image
+import pandas as pd
 
 # Specify canvas parameters in application
 drawing_mode = st.sidebar.selectbox(
