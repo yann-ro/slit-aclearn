@@ -19,16 +19,9 @@ def train_window():
         labelling_section()
         st.markdown(f'---')
 
-
-    big_center = st.columns([3,1,4])
-    center = st.columns([2,1,2])
-    with big_center[1]:
-        if st.session_state['oracle'] == 'computer':
-            nb_epochs = st.number_input('number of epochs', min_value=1, max_value=500, step=1)
-    with center[1]:
+    _, center, _ = st.columns([2,1,2])
+    with center:
         retrain = st.button('Retrain Model')
-
-    
 
     if retrain:
         progress_bar = st.progress(0)
@@ -42,7 +35,7 @@ def train_window():
 def training_parameters_section():
     modify = st.checkbox('modify parameters')
 
-    cols = st.columns([1,1,1,1,1,2])
+    cols = st.columns([1,1,1,1,1,1,1])
     with cols[0]:
         st.markdown('Task')
         st.markdown(f"<font color='gray'>{st.session_state.task}", unsafe_allow_html=True)
@@ -51,11 +44,16 @@ def training_parameters_section():
         st.markdown(f"<font color='gray'>{st.session_state.dataset_data_path}", unsafe_allow_html=True)
     if modify:
         with cols[2]:
-            st.session_state['oracle'] = st.selectbox('Oracle', ['computer', 'user'])
+            st.session_state['oracle'] = st.selectbox('Oracle', ['user', 'computer'])
         with cols[3]:
             st.session_state['query_size'] = st.slider('Query size', 1, 100)
         with cols[4]:
             st.session_state['device'] = st.selectbox('Device', ['cpu', 'gpu'])
+        
+        if st.session_state['oracle'] == 'computer':
+            with cols[5]:
+                st.session_state['n_epochs'] = st.number_input('number of epochs', min_value=1, max_value=500, step=1)
+                
     else:
         with cols[2]:
             st.markdown('Oracle')
@@ -66,15 +64,19 @@ def training_parameters_section():
         with cols[4]:
             st.markdown('Device')
             st.markdown(f"<font color='gray'>{st.session_state.device}", unsafe_allow_html=True)
+        
+        if st.session_state['oracle'] == 'computer':
+            with cols[5]:
+                st.markdown('N epochs')
+                st.markdown(f"<font color='gray'>{st.session_state.n_epochs}", unsafe_allow_html=True)    
+        
 
 
 def labelling_section():
     if st.session_state.task == 'classification':
-        with st.container():
-            classification_task()
+        classification_task()
     elif st.session_state.task == 'object_detection':
-        with st.container():
-            object_detection_task()
+        object_detection_task()
 
 
 def classification_task():
@@ -110,46 +112,38 @@ def classification_task():
 
 def object_detection_task():
     st.sidebar.title('Labelling tools')
+    left,center,right = st.columns([2,4,2])
 
-    drawing_mode = st.sidebar.selectbox(
-        'Drawing tool', ('polygon', 'rect', 'freedraw', 'transform')
-    )
+    with left:
+        drawing_mode = st.selectbox(
+            'Drawing tool', ('polygon', 'freedraw', 'rect')
+        )
+        
+        if st.checkbox('edit', False):
+            drawing_mode = 'transform'
 
-    stroke_width = 2
-    point_display_radius = 2
-    stroke_color = '#000'
-    bg_color = '#eee'
-    
-    
-    
+        class_selected = st.radio('Class', ('class1','class2', 'class3'))
 
-    class_selected = st.sidebar.radio('Class', ('class1','class2', 'class3'))
-    
     if class_selected =='class1':
         fill_color = 'rgba(255, 0, 0, 0.3)'
-    if class_selected =='class2':
+    elif class_selected =='class2':
         fill_color = 'rgba(0, 255, 0, 0.3)'
-    if class_selected =='class3':
+    elif class_selected =='class3':
         fill_color = 'rgba(0, 0, 255, 0.3)'
+        
+    with right:
+        st.button('validate')
+        st.button('next')
 
-    canvas_result = st_canvas(
-        fill_color=fill_color,
-        stroke_width=stroke_width,
-        stroke_color=stroke_color,
-        background_image=st.session_state.image,
-        update_streamlit=True,
-        height=600,
-        drawing_mode=drawing_mode,
-        point_display_radius=point_display_radius if drawing_mode == 'point' else 0,
-        key="canvas",
-    )
-
-    #st_canvas(initial_drawing=canvas_result.json_data)
-
-    # if canvas_result.image_data is not None:
-    #     st.image(canvas_result.image_data)
-    # if canvas_result.json_data is not None:
-    #     objects = pd.json_normalize(canvas_result.json_data["objects"]) # need to convert obj to str because PyArrow
-    #     for col in objects.select_dtypes(include=['object']).columns:
-    #         objects[col] = objects[col].astype("str")
-    #     st.dataframe(objects)
+    with center:
+        canvas_result = st_canvas(
+            fill_color=fill_color,
+            stroke_width=2,
+            stroke_color='#000',
+            background_image=st.session_state.image,
+            update_streamlit=True,
+            height=400,
+            drawing_mode=drawing_mode,
+            point_display_radius=0,
+            key="canvas",
+        )

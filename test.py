@@ -1,19 +1,43 @@
+import pandas as pd
+from PIL import Image
 import streamlit as st
-import hydralit_components as hc
+from streamlit_drawable_canvas import st_canvas
 
-# define what option labels and icons to display
-option_data = [
-   {'icon': "bi bi-hand-thumbs-up", 'label':"Agree"},
-   {'icon':"fa fa-question-circle",'label':"Unsure"},
-   {'icon': "bi bi-hand-thumbs-down", 'label':"Disagree"},
-]
+# Specify canvas parameters in application
+drawing_mode = st.sidebar.selectbox(
+    "Drawing tool:", ("point", "freedraw", "line", "rect", "circle", "transform")
+)
 
-# override the theme, else it will use the Streamlit applied theme
-over_theme = {'txc_inactive': 'white','menu_background':'purple','txc_active':'yellow','option_active':'blue'}
-font_fmt = {'font-class':'h2','font-size':'150%'}
+stroke_width = st.sidebar.slider("Stroke width: ", 1, 25, 3)
+if drawing_mode == 'point':
+    point_display_radius = st.sidebar.slider("Point display radius: ", 1, 25, 3)
+stroke_color = st.sidebar.color_picker("Stroke color hex: ")
+bg_color = st.sidebar.color_picker("Background color hex: ", "#eee")
+bg_image = st.sidebar.file_uploader("Background image:", type=["png", "jpg"])
 
-# display a horizontal version of the option bar
-op = hc.option_bar(option_definition=option_data,title='Feedback Response',key='PrimaryOption',override_theme=over_theme,font_styling=font_fmt,horizontal_orientation=True)
+realtime_update = st.sidebar.checkbox("Update in realtime", True)
 
-# display a version version of the option bar
-op2 = hc.option_bar(option_definition=option_data,title='Feedback Response',key='PrimaryOption',override_theme=over_theme,font_styling=font_fmt,horizontal_orientation=False)
+    
+
+# Create a canvas component
+canvas_result = st_canvas(
+    fill_color="rgba(255, 165, 0, 0.3)",  # Fixed fill color with some opacity
+    stroke_width=stroke_width,
+    stroke_color=stroke_color,
+    background_color=bg_color,
+    background_image=Image.open(bg_image) if bg_image else None,
+    update_streamlit=realtime_update,
+    height=150,
+    drawing_mode=drawing_mode,
+    point_display_radius=point_display_radius if drawing_mode == 'point' else 0,
+    key="canvas",
+)
+
+# Do something interesting with the image data and paths
+if canvas_result.image_data is not None:
+    st.image(canvas_result.image_data)
+if canvas_result.json_data is not None:
+    objects = pd.json_normalize(canvas_result.json_data["objects"]) # need to convert obj to str because PyArrow
+    for col in objects.select_dtypes(include=['object']).columns:
+        objects[col] = objects[col].astype("str")
+    st.dataframe(objects)

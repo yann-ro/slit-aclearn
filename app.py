@@ -13,11 +13,15 @@ st.markdown('---')
 with st.sidebar:
     page = wp.sections.nav_bar()
 
+
 if page == 'setup':
     wp.sections.setup.setup_window()      
 
-if page == 'train':
+elif page == 'train':
     wp.sections.train.train_window()
 
-if page == 'plot':
+elif page == 'plot':
     wp.sections.plot.plot_windows()
+
+# if page == 'test':
+#   wp.sections.train.object_detection_task()
