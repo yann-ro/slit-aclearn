@@ -84,9 +84,11 @@ def save_file(file):
 
 def task_section():
     task_names = ['classification', 'object_detection', 'semantic_segmentation']
+    edit_task = st.checkbox('edit task', disabled=st.session_state.setup_finished)
     
-    if st.checkbox('edit task', disabled=st.session_state.setup_finished):
-        st.session_state['task'] = st.selectbox('task', task_names)
+    if edit_task:
+        col1, col2 = st.columns([1,6])
+        with col1: st.session_state['task'] = st.selectbox('task', task_names)
             
     else:
         col1, col2 = st.columns([1,6])

@@ -10,18 +10,14 @@ title = 'Active Learning Algorithm Benchmark Interface'
 st.markdown(f'# <center>{title}</center>', unsafe_allow_html=True)
 st.markdown('---')
 
-
 with st.sidebar:
     page = wp.sections.nav_bar()
 
-
 if page == 'setup':
-    wp.sections.setup.setup_window()
-        
+    wp.sections.setup.setup_window()      
 
 if page == 'train':
     wp.sections.train.train_window()
-
 
 if page == 'plot':
     wp.sections.plot.plot_windows()

@@ -28,8 +28,15 @@ def set_global_param(key, value):
         st.session_state[key] = value
 
 def init_global_parameters():
-    for param in ['dataset_data_path','dataset_labels_path', 'dataset_data_unlabeled_path', 'task']:
+    parameters = ['dataset_data_path','dataset_labels_path', 
+                  'dataset_data_unlabeled_path']
+    for param in parameters:
         set_global_param(param, None)
+
+    set_global_param('task', 'object_detection')
+    set_global_param('oracle', 'user')
+    set_global_param('device', 'cpu')
+    set_global_param('query_size', 1)
 
     set_global_param('n_models', 0)
     set_global_param('setup_finished', False)

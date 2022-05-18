@@ -10,10 +10,10 @@ import time
 def train_window():
 
     st.header('Training parameters')
-    oracle = training_parameters_section()
+    training_parameters_section()
     st.markdown(f'---')
     
-    if oracle == 'user':
+    if st.session_state['oracle'] == 'user':
         st.markdown(f"## Labelling: <font color='gray'>{st.session_state.task}", unsafe_allow_html=True)
         labelling_section()
         st.markdown(f'---')
@@ -22,7 +22,7 @@ def train_window():
     big_center = st.columns([3,1,4])
     center = st.columns([2,1,2])
     with big_center[1]:
-        if oracle == 'computer':
+        if st.session_state['oracle'] == 'computer':
             nb_epochs = st.number_input('number of epochs', min_value=1, max_value=500, step=1)
     with center[1]:
         retrain = st.button('Retrain Model')
@@ -48,23 +48,32 @@ def training_parameters_section():
     with cols[1]:
         st.markdown('Dataset')
         st.markdown(f"<font color='gray'>{st.session_state.dataset_data_path}", unsafe_allow_html=True)
-    with cols[2]:
-        oracle = st.selectbox('Oracle', ['computer', 'user'])
-    with cols[3]:
-        query_size = st.slider('Query size',1,100)
-    with cols[4]:
-        device = st.selectbox('Device', ['cpu', 'gpu'])
-
-    return oracle
-
+    if modify:
+        with cols[2]:
+            st.session_state['oracle'] = st.selectbox('Oracle', ['computer', 'user'])
+        with cols[3]:
+            st.session_state['query_size'] = st.slider('Query size', 1, 100)
+        with cols[4]:
+            st.session_state['device'] = st.selectbox('Device', ['cpu', 'gpu'])
+    else:
+        with cols[2]:
+            st.markdown('Oracle')
+            st.markdown(f"<font color='gray'>{st.session_state.oracle}", unsafe_allow_html=True)
+        with cols[3]:
+            st.markdown('Query size')
+            st.markdown(f"<font color='gray'>{st.session_state.query_size}", unsafe_allow_html=True)
+        with cols[4]:
+            st.markdown('Device')
+            st.markdown(f"<font color='gray'>{st.session_state.device}", unsafe_allow_html=True)
 
 
 def labelling_section():
     if st.session_state.task == 'classification':
-        classification_task()
+        with st.container():
+            classification_task()
     elif st.session_state.task == 'object_detection':
-        object_detection_task()
-
+        with st.container():
+            object_detection_task()
 
 
 def classification_task():
@@ -102,16 +111,16 @@ def object_detection_task():
     st.sidebar.title('Labelling tools')
 
     drawing_mode = st.sidebar.selectbox(
-        'Drawing tool', ('rect', 'point', 'freedraw', 'transform')
+        'Drawing tool', ('polygon', 'rect', 'freedraw', 'transform')
     )
-
-    class_selected = st.sidebar.selectbox('Class', ('class1','class2', 'class3'))
 
     stroke_width = 2
     point_display_radius = 2
     bg_image = None
     stroke_color = '#000'
     bg_color = '#eee'
+
+    class_selected = st.sidebar.selectbox('Class', ('class1','class2', 'class3'))
     
     if class_selected =='class1':
         fill_color = 'rgba(255, 0, 0, 0.3)'
@@ -127,8 +136,8 @@ def object_detection_task():
         stroke_color=stroke_color,
         background_color=bg_color,
         background_image=Image.open(bg_image) if bg_image else None,
-        update_streamlit=True,
-        height=600,
+        update_streamlit=False,
+        height=300,
         drawing_mode=drawing_mode,
         point_display_radius=point_display_radius if drawing_mode == 'point' else 0,
         key="canvas",
