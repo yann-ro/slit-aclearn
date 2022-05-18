@@ -28,7 +28,7 @@ def set_global_param(key, value):
         st.session_state[key] = value
 
 def init_global_parameters():
-    for param in ['dataset_data','dataset_labels', 'dataset_data_unlabeled', 'task']:
+    for param in ['dataset_data_path','dataset_labels_path', 'dataset_data_unlabeled_path', 'task']:
         set_global_param(param, None)
 
     set_global_param('n_models', 0)

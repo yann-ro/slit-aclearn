@@ -1,2 +1,3 @@
 # sl-aclearn
-streamlit active learning plateform
+
+`Launch`: streamlit run launch_webapp.py 
