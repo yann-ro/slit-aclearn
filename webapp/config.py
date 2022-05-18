@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import datatools as dtt
 import streamlit as st
+from PIL import Image
 
 def setup_color_plot(theme):
     
@@ -27,6 +28,7 @@ def set_global_param(key, value):
     if key not in st.session_state:
         st.session_state[key] = value
 
+
 def init_global_parameters():
     parameters = ['dataset_data_path','dataset_labels_path', 
                   'dataset_data_unlabeled_path']
@@ -43,3 +45,6 @@ def init_global_parameters():
 
     set_global_param('mnist', dtt.load_dataset.load_random_mnist())
     set_global_param('labels', ['0','1','2','3','4','5','6','7','8','9'])
+
+    bg_image = 'data/ano_metal_nut.png'
+    set_global_param('image', Image.open(bg_image))

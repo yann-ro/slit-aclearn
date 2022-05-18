@@ -5,6 +5,7 @@ import streamlit as st
 from PIL import Image
 import pandas as pd
 import time
+from webapp.config import set_global_param
 
 
 def train_window():
@@ -116,9 +117,11 @@ def object_detection_task():
 
     stroke_width = 2
     point_display_radius = 2
-    bg_image = None
     stroke_color = '#000'
     bg_color = '#eee'
+    
+    
+    
 
     class_selected = st.sidebar.radio('Class', ('class1','class2', 'class3'))
     
@@ -129,15 +132,13 @@ def object_detection_task():
     if class_selected =='class3':
         fill_color = 'rgba(0, 0, 255, 0.3)'
 
-    # Create a canvas component
     canvas_result = st_canvas(
         fill_color=fill_color,
         stroke_width=stroke_width,
         stroke_color=stroke_color,
-        background_color=bg_color,
-        background_image=Image.open(bg_image) if bg_image else None,
-        update_streamlit=False,
-        height=300,
+        background_image=st.session_state.image,
+        update_streamlit=True,
+        height=600,
         drawing_mode=drawing_mode,
         point_display_radius=point_display_radius if drawing_mode == 'point' else 0,
         key="canvas",
