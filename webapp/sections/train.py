@@ -1,9 +1,6 @@
 from streamlit_drawable_canvas import st_canvas
 import matplotlib.pyplot as plt
-import datatools as dtt
 import streamlit as st
-from PIL import Image
-import pandas as pd
 import time
 from webapp.config import set_global_param
 
@@ -105,7 +102,6 @@ def classification_task():
 
         if validate: 
             st.success('Label sucessfully saved !')
-            st.session_state.mnist = dtt.load_dataset.load_random_mnist()
         else:
             st.markdown('#')
 
@@ -115,22 +111,14 @@ def object_detection_task():
     left,center,right = st.columns([2,4,2])
 
     with left:
-        up = st.container()
-        down = st.container()
-        
-        with down:
-            transform = st.checkbox('transform', False)
+        transform = st.checkbox('transform', False)
 
         if transform:
             drawing_mode = 'transform'
-
-        with up:
-            if not transform:
-                drawing_mode = st.selectbox(
-                    'Drawing tool', ('rect', 'polygon', 'freedraw')
-                )
-
-        class_selected = st.radio('Class', ('class1','class2', 'class3'))
+            class_selected = None
+        else:
+            drawing_mode = st.selectbox('Drawing tool', ('rect', 'polygon', 'freedraw'))
+            class_selected = st.radio('Class', ('class1','class2', 'class3'))
 
     if class_selected =='class1':
         fill_color = 'rgba(255, 0, 0, 0.3)'
@@ -138,10 +126,12 @@ def object_detection_task():
         fill_color = 'rgba(0, 255, 0, 0.3)'
     elif class_selected =='class3':
         fill_color = 'rgba(0, 0, 255, 0.3)'
+    else: 
+        fill_color=None
+
         
     with right:
         st.button('validate')
-        st.button('next')
 
     with center:
         canvas_result = st_canvas(
