@@ -115,12 +115,20 @@ def object_detection_task():
     left,center,right = st.columns([2,4,2])
 
     with left:
-        drawing_mode = st.selectbox(
-            'Drawing tool', ('polygon', 'freedraw', 'rect')
-        )
+        up = st.container()
+        down = st.container()
         
-        if st.checkbox('edit', False):
+        with down:
+            transform = st.checkbox('transform', False)
+
+        if transform:
             drawing_mode = 'transform'
+
+        with up:
+            if not transform:
+                drawing_mode = st.selectbox(
+                    'Drawing tool', ('rect', 'polygon', 'freedraw')
+                )
 
         class_selected = st.radio('Class', ('class1','class2', 'class3'))
 
@@ -141,9 +149,8 @@ def object_detection_task():
             stroke_width=2,
             stroke_color='#000',
             background_image=st.session_state.image,
-            update_streamlit=True,
-            height=400,
+            update_streamlit=False,
+            height=500,
             drawing_mode=drawing_mode,
-            point_display_radius=0,
             key="canvas",
         )
