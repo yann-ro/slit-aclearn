@@ -52,4 +52,4 @@ def init_global_parameters():
 
     set_global_param('image', 'data/ano_metal_nut.png', image=True)
 
-    set_global_param('labels', ['0','1','2','3','4','5','6','7','8','9'])
+    set_global_param('labels', ['valid','abnormal'])

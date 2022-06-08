@@ -2,7 +2,6 @@ from streamlit_drawable_canvas import st_canvas
 import matplotlib.pyplot as plt
 import streamlit as st
 import time
-from webapp.config import set_global_param
 
 
 def train_window():
@@ -15,7 +14,7 @@ def train_window():
         st.markdown(f"## Labelling: <font color='gray'>{st.session_state.task}", unsafe_allow_html=True)
         labelling_section()
         st.markdown(f'---')
-
+    
     _, center, _ = st.columns([2,1,2])
     with center:
         retrain = st.button('Retrain Model')
@@ -77,28 +76,19 @@ def labelling_section():
 
 
 def classification_task():
-        cols4 = st.columns([2,1,1,1])
+        cols4 = st.columns([2,1,1,2])
 
         with cols4[0]:
             fig = plt.figure(figsize=(1,1))
             
-            plt.imshow(st.session_state.mnist, cmap='gray')
+            plt.imshow(st.session_state.image, cmap='gray')
             plt.axis('off')
             st.pyplot(fig)
 
-        labels = st.session_state.labels
-
         with cols4[1]: 
             st.markdown('#\n'*5)
-            st.radio('label', labels)
-        
-        with cols4[2]:
-            st.markdown('#\n'*10)
+            st.radio('label', st.session_state.labels)
             validate = st.button('validate')
-        
-        with cols4[3]:
-            st.markdown('#\n'*10)
-            next_img = st.button('next')
 
         if validate: 
             st.success('Label sucessfully saved !')
