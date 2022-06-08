@@ -5,42 +5,57 @@ import numpy as np
 
 
 class AcLearnDataset():
-    def __init__(self, size_init_per_class=1, dataset_name='MNIST'):
+    def __init__(self, dataset_path='demo_mnist', size_init_per_class=1):
         """
         """
-        self.name = dataset_name
-        self.read_data_demo()
+
+        if (dataset_path=='demo_mnist') or (dataset_path=='demo_fmnist'): 
+            train, test, self.nb_class, self.image_size = self.read_famous_dataset(dataset_path)
+        else:
+            train, test, self.nb_class, self.image_size = self.read_dataset(dataset_path)
+        
+        self.X_train, self.y_train = train
+        self.X_test, self.y_test = test
+
         self.preprocessing()
         self.init_label_pool(size_init_per_class)
 
 
 
-    def read_data_demo(self):
+    def read_famous_dataset(self, demo_name):
         """
         """
-        train,test=None,None
 
-        if self.name == 'MNIST':
-            train = MNIST('.', train=True, download=True, transform=ToTensor())
-            test  = MNIST('.', train=False,download=True, transform=ToTensor())
-        elif self.name == 'FashionMNIST':
-            train = FashionMNIST('.', train=True, download=True, transform=ToTensor())
-            test = FashionMNIST('.', train=False, download=True, transform=ToTensor())
+        if demo_name == 'demo_mnist':
+            train = MNIST('.', train=True, download=True)
+            test  = MNIST('.', train=False, download=True)
+
+        elif demo_name == 'demo_fmnist':
+            train = FashionMNIST('.', train=True, download=True)
+            test = FashionMNIST('.', train=False, download=True)
         
         traindataloader = DataLoader(train, shuffle=True, batch_size=60000)
         testdataloader  = DataLoader(test , shuffle=True, batch_size=10000)
         
         X_train, y_train = next(iter(traindataloader))
-        self.X_train = X_train.detach().cpu().numpy()
-        self.y_train = y_train.detach().cpu().numpy()
+        X_train = X_train
+        y_train = y_train
         
         X_test , y_test  = next(iter(testdataloader))
-        self.X_test = X_test.detach().cpu().numpy()
-        self.y_test = y_test.detach().cpu().numpy()
+        X_test = X_test
+        y_test = y_test
 
-        self.nb_class = len(set(self.y_test))
-        self.image_size = X_train.shape[2:]
+        nb_class = len(set(self.y_test))
+        image_size = X_train.shape[2:]
+
+        return (X_train, y_train), (X_test, y_test), nb_class, image_size
     
+
+    def read_dataset(self, path):
+        """
+        """
+
+        #return X_train, y_train, X_test, y_test, nb_class, image_size
 
 
     def preprocessing(self):
@@ -54,7 +69,7 @@ class AcLearnDataset():
     def init_label_pool(self,nb_init_label_per_class):
         """
         """
-        init_idx = np.array([],dtype=np.int)
+        init_idx = np.array([], dtype=np.int)
         
         for i in range(self.nb_class):
             idx = np.random.choice(np.where(self.y_train==i)[0], size=nb_init_label_per_class, replace=False)

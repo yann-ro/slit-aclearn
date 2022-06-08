@@ -14,7 +14,7 @@ class AcLearnModel():
     """
 
 
-    def __init__(self, query_strategy, dataset, logger, is_oracle=False):
+    def __init__(self, query_strategy, dataset, is_oracle=False):
         """
         query_strategy (func):
         is_oracle (bool):
@@ -25,7 +25,6 @@ class AcLearnModel():
         elif query_strategy == 'variation_ratio': self.query_strategy = variation_ratio
         else : print('Not existing query_strategy')
         
-        self.logger = logger
         self.is_oracle = is_oracle
         self.dataset = dataset
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
