@@ -1,3 +1,4 @@
+from matplotlib.transforms import Transform
 from torchvision.datasets import MNIST,FashionMNIST
 from torchvision.transforms import ToTensor
 from torch.utils.data import DataLoader
@@ -27,25 +28,22 @@ class AcLearnDataset():
         """
 
         if demo_name == 'demo_mnist':
-            train = MNIST('.', train=True, download=True)
-            test  = MNIST('.', train=False, download=True)
+            train = MNIST('.', train=True, download=True, transform=ToTensor())
+            test  = MNIST('.', train=False, download=True, transform=ToTensor())
 
         elif demo_name == 'demo_fmnist':
-            train = FashionMNIST('.', train=True, download=True)
-            test = FashionMNIST('.', train=False, download=True)
+            train = FashionMNIST('.', train=True, download=True, transform=ToTensor())
+            test = FashionMNIST('.', train=False, download=True, transform=ToTensor())
         
         traindataloader = DataLoader(train, shuffle=True, batch_size=60000)
         testdataloader  = DataLoader(test , shuffle=True, batch_size=10000)
         
         X_train, y_train = next(iter(traindataloader))
-        X_train = X_train
-        y_train = y_train
-        
-        X_test , y_test  = next(iter(testdataloader))
-        X_test = X_test
-        y_test = y_test
+        X_train, y_train = X_train.numpy(), y_train.numpy()
+        X_test , y_test = next(iter(testdataloader))
+        X_test , y_test = X_test.numpy() , y_test.numpy()
 
-        nb_class = len(set(self.y_test))
+        nb_class = len(set(y_test))
         image_size = X_train.shape[2:]
 
         return (X_train, y_train), (X_test, y_test), nb_class, image_size
