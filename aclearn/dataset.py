@@ -54,8 +54,10 @@ class AcLearnDataset():
         """
 
         if extension == 'npy':
-            X = np.load(data_path).reshape(-1, 28,28)
-            y = np.array(np.load(label_path).squeeze(), dtype=int)
+            X = np.load(data_path)
+            y = np.load(label_path)
+            X = np.array(X.reshape(-1, 28,28), dtype=np.float32)
+            y = np.array(y.squeeze(), dtype=int)
 
             self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=0.2)
 
@@ -79,6 +81,7 @@ class AcLearnDataset():
         self.X_test = self.X_test.reshape(self.X_test.shape[0], 1, self.image_size[0], self.image_size[1])
 
         self.X_pool = self.X_pool.reshape(self.X_pool.shape[0], 1, self.image_size[0], self.image_size[1])
+        self.X_init = self.X_init.reshape(self.X_init.shape[0], 1, self.image_size[0], self.image_size[1])
 
     
 

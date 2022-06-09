@@ -1,10 +1,10 @@
 import streamlit as st
-import webapp as wp
+import app
 
 st.set_page_config(layout='wide')
-color1,color2 = wp.config.setup_color_plot('dark_theme')
+color1,color2 = app.config.setup_color_plot('dark_theme')
 
-wp.init_global_parameters()
+app.init_global_parameters()
 
 title = 'Active Learning Algorithm Benchmark Interface'
 st.markdown(f'# <center>{title}</center>', unsafe_allow_html=True)
@@ -12,13 +12,13 @@ st.markdown('---')
 
 
 with st.sidebar:
-    page = wp.sections.nav_bar()
+    page = app.sections.nav_bar()
 
 if page == 'setup':
-    wp.sections.setup.setup_window()      
+    app.sections.setup.setup_window()      
 
 elif page == 'train':
-    wp.sections.train.train_window()
+    app.sections.train.train_window()
 
 elif page == 'plot':
-    wp.sections.plot.plot_windows()
+    app.sections.plot.plot_windows()
