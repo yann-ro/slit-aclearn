@@ -10,15 +10,13 @@ import torch
 
 
 class AcLearnModel():
-    """
-    """
-
 
     def __init__(self, query_strategy, dataset, is_oracle=False, device='cpu'):
         """
         query_strategy (func):
         is_oracle (bool):
         """
+
         print('$ init AcLearn model')
         if query_strategy == 'Uniform': self.query_strategy = uniform
         elif query_strategy == 'Max_entropy': self.query_strategy = max_entropy
@@ -28,7 +26,7 @@ class AcLearnModel():
         
         self.is_oracle = is_oracle
         self.dataset = dataset
-        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        self.device = device
 
         self.estimator = NeuralNetClassifier(CNN,
                                 max_epochs=50,
@@ -49,13 +47,16 @@ class AcLearnModel():
     def evaluate_max(self):
         """
         """
+
         self.estimator.fit(self.dataset.X_train, self.dataset.y_train)
         self.max_accuracy = self.estimator.score(self.dataset.X_test, self.dataset.y_test)
 
 
 
     def init_training(self):
-        
+        """
+        """
+
         self.learner = ActiveLearner(estimator=self.estimator,
                                 X_training = self.dataset.X_init,
                                 y_training = self.dataset.y_init,
@@ -88,6 +89,7 @@ class AcLearnModel():
     def forward(self,query_size,train_acc):
         """
         """
+        
         query_idx, query_instance = self.learner.query(self.dataset.X_pool, query_size)
         
         self.learner.teach(self.dataset.X_pool[query_idx], self.dataset.y_pool[query_idx])

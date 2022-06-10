@@ -23,7 +23,6 @@ class AcLearnDataset():
 
 
 
-
     def read_famous_dataset(self, demo_name):
         """
         """
@@ -75,10 +74,10 @@ class AcLearnDataset():
         
 
 
-
     def preprocessing(self):
         """
         """
+
         self.X_train = self.X_train.reshape(self.X_train.shape[0], 1, self.image_size[0], self.image_size[1])
         self.X_test = self.X_test.reshape(self.X_test.shape[0], 1, self.image_size[0], self.image_size[1])
 
@@ -90,6 +89,7 @@ class AcLearnDataset():
     def init_label_pool(self,nb_init_label_per_class):
         """
         """
+
         init_idx = np.array([], dtype=np.int)
         
         for i in range(self.nb_class):

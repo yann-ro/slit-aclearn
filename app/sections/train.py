@@ -1,8 +1,6 @@
 from streamlit_drawable_canvas import st_canvas
 import matplotlib.pyplot as plt
 import streamlit as st
-import time
-
 
 
 def train_window():
@@ -58,6 +56,7 @@ def training_parameters_section():
 
 
 def labeling_section():
+
     if st.session_state.task == 'classification':
         classification_task()
     elif st.session_state.task == 'object_detection':
@@ -123,5 +122,5 @@ def object_detection_task():
             update_streamlit=False,
             height=500,
             drawing_mode=drawing_mode,
-            key="canvas",
+            key='canvas',
         )
