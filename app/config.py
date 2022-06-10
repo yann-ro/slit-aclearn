@@ -20,6 +20,7 @@ def setup_color_plot(theme):
     plt.rcParams['axes.titlecolor'] = color2
     plt.rcParams['ytick.labelcolor'] = color2
     plt.rcParams['xtick.labelcolor'] = color2
+    plt.rcParams['legend.facecolor'] = 'gray'
 
     return color1,color2
 
@@ -36,9 +37,9 @@ def init_global_parameters():
     set_global_param('dataset_data_unlabeled_path', None)
 
     set_global_param('task', 'classification')
-    set_global_param('oracle', 'user')
+    set_global_param('oracle', 'computer')
     set_global_param('device', 'cpu')
-    set_global_param('query_size', 1)
+    set_global_param('query_size', 10)
 
     set_global_param('n_models', 0)
     set_global_param('setup_finished', False)

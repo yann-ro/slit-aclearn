@@ -44,6 +44,7 @@ class AcLearnDataset():
         self.X_test , self.y_test = next(iter(testdataloader))
         self.X_test , self.y_test = self.X_test.numpy() , self.y_test.numpy()
 
+        self.classes = set(self.y_test)
         self.nb_class = len(set(self.y_test))
         self.image_size = self.X_train.shape[-2:]
     
@@ -64,7 +65,8 @@ class AcLearnDataset():
             if data_path_unlab:
                 self.X_pool = np.load(data_path_unlab)
                 self.y_pool = None
-
+            
+            self.classes = set(y)
             self.nb_class = len(set(y))
             self.image_size = X.shape[-2:]
 

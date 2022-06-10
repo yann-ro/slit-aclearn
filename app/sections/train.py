@@ -11,20 +11,26 @@ def train_window():
     st.markdown(f'---')
     
     if st.session_state['oracle'] == 'user':
-        st.markdown(f"## Labelling: <font color='gray'>{st.session_state.task}", unsafe_allow_html=True)
-        labelling_section()
+        st.markdown(f"## Labeling: <font color='gray'>{st.session_state.task}", unsafe_allow_html=True)
+        labeling_section()
         st.markdown(f'---')
     
     _, center, _ = st.columns([2,1,2])
     with center:
         retrain = st.button('Retrain Model')
-
+    
     if retrain:
         progress_bar = st.progress(0)
-        for i in range(1,101):
-            time.sleep(0.1)
-            progress_bar.progress(i)
+        for i in range(1, st.session_state.n_models+1):
+            st.session_state[f'model_{i}'].active_learning_procedure(n_queries=st.session_state['n_epochs'], 
+                                                                     query_size=st.session_state['query_size'], 
+                                                                     train_acc=True)
+            
+            print('* train finished !')
+            progress_bar.progress(int((i)/st.session_state.n_models*100))
+
         st.success('Model sucessfully retrained !')
+        
 
 
 
@@ -42,7 +48,7 @@ def training_parameters_section():
         with cols[2]:
             st.session_state['oracle'] = st.selectbox('Oracle', ['user', 'computer'])
         with cols[3]:
-            st.session_state['query_size'] = st.slider('Query size', 1, 100)
+            st.session_state['query_size'] = st.slider('Query size', 1, 100, 10)
         with cols[4]:
             st.session_state['device'] = st.selectbox('Device', ['cpu', 'gpu'])
         
@@ -68,7 +74,7 @@ def training_parameters_section():
         
 
 
-def labelling_section():
+def labeling_section():
     if st.session_state.task == 'classification':
         classification_task()
     elif st.session_state.task == 'object_detection':
@@ -81,7 +87,7 @@ def classification_task():
         with cols4[0]:
             fig = plt.figure(figsize=(1,1))
             
-            plt.imshow(st.session_state.image, cmap='gray')
+            plt.imshow(st.session_state.dataset.X_train[0][0], cmap='gray')
             plt.axis('off')
             st.pyplot(fig)
 
@@ -97,7 +103,7 @@ def classification_task():
 
 
 def object_detection_task():
-    st.sidebar.title('Labelling tools')
+    st.sidebar.title('Labeling tools')
     left,center,right = st.columns([2,4,2])
 
     with left:
