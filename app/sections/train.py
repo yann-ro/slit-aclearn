@@ -24,18 +24,19 @@ def train_window():
         for i in range(1, st.session_state.n_models+1):
             st.session_state[f'model_{i}'].active_learning_procedure(n_queries=st.session_state['n_epochs'], 
                                                                      query_size=st.session_state['query_size'], 
-                                                                     train_acc=True)
+                                                                     train_acc=True,
+                                                                     progress_bar=progress_bar)
             
-            print('* train finished !')
-            progress_bar.progress(int((i)/st.session_state.n_models*100))
+            print('$ train finished')
+            #progress_bar.progress(int((i)/st.session_state.n_models*100))
 
-        st.success('Model sucessfully retrained !')
+        st.success('Model sucessfully retrained')
         
 
 
 
 def training_parameters_section():
-    modify = st.checkbox('modify parameters')
+    #modify = st.checkbox('modify parameters')
 
     cols = st.columns([1,1,1,1,1,1,1])
     with cols[0]:
@@ -44,18 +45,18 @@ def training_parameters_section():
     with cols[1]:
         st.markdown('Dataset')
         st.markdown(f"<font color='gray'>{st.session_state.dataset_data_path}", unsafe_allow_html=True)
-    if modify:
-        with cols[2]:
-            st.session_state['oracle'] = st.selectbox('Oracle', ['user', 'computer'])
-        with cols[3]:
-            st.session_state['query_size'] = st.slider('Query size', 1, 100, 10)
-        with cols[4]:
-            st.session_state['device'] = st.selectbox('Device', ['cpu', 'gpu'])
-        
-        if st.session_state['oracle'] == 'computer':
-            with cols[5]:
-                st.session_state['n_epochs'] = st.number_input('number of epochs', min_value=1, max_value=500, step=1)
-                
+#    if modify:
+    with cols[2]:
+        st.session_state['oracle'] = st.selectbox('Oracle', ['computer', 'user'])
+    with cols[3]:
+        st.session_state['query_size'] = st.slider('Query size', 1, 100, 10)
+    with cols[4]:
+        st.session_state['device'] = st.selectbox('Device', ['cpu', 'gpu'])
+    
+    if st.session_state['oracle'] == 'computer':
+        with cols[5]:
+            st.session_state['n_epochs'] = st.number_input('number of epochs', min_value=1, max_value=500, value=2, step=1)
+""""               
     else:
         with cols[2]:
             st.markdown('Oracle')
@@ -71,7 +72,7 @@ def training_parameters_section():
             with cols[5]:
                 st.markdown('N epochs')
                 st.markdown(f"<font color='gray'>{st.session_state.n_epochs}", unsafe_allow_html=True)    
-        
+"""        
 
 
 def labeling_section():

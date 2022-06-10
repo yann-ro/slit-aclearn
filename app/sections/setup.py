@@ -1,8 +1,8 @@
 from aclearn.dataset import AcLearnDataset
-from aclearn.model import AcLearnModel
 import streamlit as st
 import time
 import copy
+import app
 import os
 
 def setup_window():
@@ -27,9 +27,13 @@ def setup_window():
         
         if st.session_state['task'] and st.session_state['dataset_data_path'] and st.session_state['ml_algo_1']:
             st.session_state.setup_finished = True
+            
+            for i in range(1, st.session_state.n_models+1):
+                st.session_state[f'model_{i}'].init_training()
             st.success('setup finished')
-            time.sleep(1)
+            
             st.experimental_rerun()
+
         else:
             st.error('missing some elements')
 
@@ -41,17 +45,17 @@ def dataset_section():
     uploaded_unlabeled = None
 
     if st.checkbox('edit dataset', disabled=st.session_state.setup_finished):
-        col, _ = st.columns([1,3])
-        with col:
+        left, center, right = st.columns([1,1,1])
+        with left: 
             uploaded_data = st.file_uploader('Choose a file for data', type=['npy'], accept_multiple_files=False)
+        with center: 
             uploaded_labels = st.file_uploader('Choose a file for labels', type=['npy'], accept_multiple_files=False)
-
+        with right:
             add_unlabeled = st.checkbox('add unlabeled')
             if add_unlabeled:
                 uploaded_unlabeled = st.file_uploader('Choose a file for data unlabeled', type=['npy'])
         
-        validate = st.button('validate import dataset')
-        if validate:
+        if  st.button('validate import dataset'):
             if uploaded_data and uploaded_labels is not None:
                 st.session_state.dataset_data_path = os.path.join('data', uploaded_data.name)
                 save_file(uploaded_data)
@@ -63,7 +67,7 @@ def dataset_section():
                                                             st.session_state.dataset_labels_path, 
                                                             size_init_per_class=1)
 
-                st.success('labeled data imported')
+                st.success('data & labels imported')
             else:
                 st.error('mising data')
             
@@ -150,5 +154,4 @@ def modify_section_models():
             with cols[3]: st.session_state[f'pre_trained_model_{i}'] = st.selectbox(f'pre-trained model ({i}) (not working)', [None])
 
             st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
-            st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
-                                                          st.session_state[f'dataset_{i}'])
+            app.set_global_param(f'model_{i}', i, kind='AcLearnModel')

@@ -1,3 +1,4 @@
+from aclearn.model import AcLearnModel
 import matplotlib.pyplot as plt
 import streamlit as st
 from PIL import Image
@@ -24,10 +25,13 @@ def setup_color_plot(theme):
 
     return color1,color2
 
-def set_global_param(key, value, image=False):
+def set_global_param(key, value, kind=False):
     if key not in st.session_state:
-        if image:
+        if kind=='image':
             st.session_state[key] = Image.open(value)
+        if kind=='AcLearnModel':
+            st.session_state[key] = AcLearnModel(st.session_state[f'al_algo_{value}'],
+                                                 st.session_state[f'dataset_{value}'])
         else:
             st.session_state[key] = value
 
@@ -44,13 +48,13 @@ def init_global_parameters():
     set_global_param('n_models', 0)
     set_global_param('setup_finished', False)
 
-    set_global_param('ml_algo_1', None)
+    #set_global_param('ml_algo_1', None)
     set_global_param('n_epochs', None)
     
     #to debug easily
     set_global_param('dataset_data_path', 'data/mnist_data.npy')
     set_global_param('dataset_labels_path', 'data/mnist_labels.npy')
 
-    set_global_param('image', 'data/ano_metal_nut.png', image=True)
+    set_global_param('image', 'data/ano_metal_nut.png', kind='image')
 
     set_global_param('labels', ['valid','abnormal'])

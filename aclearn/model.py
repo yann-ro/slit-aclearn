@@ -19,6 +19,7 @@ class AcLearnModel():
         query_strategy (func):
         is_oracle (bool):
         """
+        print('$ init AcLearn model')
         if query_strategy == 'Uniform': self.query_strategy = uniform
         elif query_strategy == 'Max_entropy': self.query_strategy = max_entropy
         elif query_strategy == 'Bald': self.query_strategy = bald
@@ -41,15 +42,9 @@ class AcLearnModel():
 
         self.acc_history = None
         self.max_accuracy = 0
-
-        self.learner = ActiveLearner(estimator=self.estimator,
-                                X_training = self.dataset.X_init,
-                                y_training = self.dataset.y_init,
-                                query_strategy = self.query_strategy)
-
-        self.acc_history = [self.learner.score(self.dataset.X_test, self.dataset.y_test)]
-        self.acc_train_history = [self.learner.score(self.dataset.X_train, self.dataset.y_train)]
         self.index_epoch = 0
+
+
 
     def evaluate_max(self):
         """
@@ -58,7 +53,22 @@ class AcLearnModel():
         self.max_accuracy = self.estimator.score(self.dataset.X_test, self.dataset.y_test)
 
 
-    def active_learning_procedure(self, n_queries=10, query_size=10, train_acc=False):
+
+    def init_training(self):
+        
+        self.learner = ActiveLearner(estimator=self.estimator,
+                                X_training = self.dataset.X_init,
+                                y_training = self.dataset.y_init,
+                                query_strategy = self.query_strategy)
+
+        self.acc_history = [self.learner.score(self.dataset.X_test, self.dataset.y_test)]
+        self.acc_train_history = [self.learner.score(self.dataset.X_train, self.dataset.y_train)]
+
+        print('$ init_training complete')
+
+
+
+    def active_learning_procedure(self, n_queries=10, query_size=10, train_acc=False, progress_bar=None):
         """
         """
         
@@ -67,9 +77,11 @@ class AcLearnModel():
             self.forward(query_size, train_acc)
             
             if train_acc:
-                print(f'(query { self.index_epoch}) Train acc: \t{self.acc_train_history[self.index_epoch]:0.4f}  |  Test acc: \t{self.acc_history[self.index_epoch]:0.4f}')
+                print(f'\t(query {self.index_epoch}) Train acc: \t{self.acc_train_history[self.index_epoch]:0.4f}  |  Test acc: \t{self.acc_history[self.index_epoch]:0.4f}')
             else:
-                print(f'(query { self.index_epoch}) Test acc: \t{self.acc_history[ self.index_epoch]:0.4f}')
+                print(f'\t(query {self.index_epoch}) Test acc: \t{self.acc_history[ self.index_epoch]:0.4f}')
+            
+            progress_bar.progress(int((i+1)/n_queries*100))
 
 
 
