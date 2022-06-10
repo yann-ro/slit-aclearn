@@ -4,6 +4,7 @@ import streamlit as st
 import time
 
 
+
 def train_window():
 
     st.header('Training parameters')
@@ -28,15 +29,12 @@ def train_window():
                                                                      progress_bar=progress_bar)
             
             print('$ train finished')
-            #progress_bar.progress(int((i)/st.session_state.n_models*100))
 
         st.success('Model sucessfully retrained')
         
 
 
-
 def training_parameters_section():
-    #modify = st.checkbox('modify parameters')
 
     cols = st.columns([1,1,1,1,1,1,1])
     with cols[0]:
@@ -45,7 +43,7 @@ def training_parameters_section():
     with cols[1]:
         st.markdown('Dataset')
         st.markdown(f"<font color='gray'>{st.session_state.dataset_data_path}", unsafe_allow_html=True)
-#    if modify:
+
     with cols[2]:
         st.session_state['oracle'] = st.selectbox('Oracle', ['computer', 'user'])
     with cols[3]:
@@ -56,23 +54,7 @@ def training_parameters_section():
     if st.session_state['oracle'] == 'computer':
         with cols[5]:
             st.session_state['n_epochs'] = st.number_input('number of epochs', min_value=1, max_value=500, value=2, step=1)
-""""               
-    else:
-        with cols[2]:
-            st.markdown('Oracle')
-            st.markdown(f"<font color='gray'>{st.session_state.oracle}", unsafe_allow_html=True)
-        with cols[3]:
-            st.markdown('Query size')
-            st.markdown(f"<font color='gray'>{st.session_state.query_size}", unsafe_allow_html=True)
-        with cols[4]:
-            st.markdown('Device')
-            st.markdown(f"<font color='gray'>{st.session_state.device}", unsafe_allow_html=True)
-        
-        if st.session_state['oracle'] == 'computer':
-            with cols[5]:
-                st.markdown('N epochs')
-                st.markdown(f"<font color='gray'>{st.session_state.n_epochs}", unsafe_allow_html=True)    
-"""        
+     
 
 
 def labeling_section():
@@ -80,6 +62,7 @@ def labeling_section():
         classification_task()
     elif st.session_state.task == 'object_detection':
         object_detection_task()
+
 
 
 def classification_task():
@@ -101,6 +84,7 @@ def classification_task():
             st.success('Label sucessfully saved !')
         else:
             st.markdown('#')
+
 
 
 def object_detection_task():
