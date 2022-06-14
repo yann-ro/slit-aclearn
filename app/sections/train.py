@@ -114,6 +114,7 @@ def object_detection_task():
         st.button('validate')
 
     with center:
+
         canvas_result = st_canvas(
             fill_color=fill_color,
             stroke_width=2,

@@ -66,6 +66,8 @@ def dataset_section():
                 st.session_state['dataset'] = AcLearnDataset(st.session_state.dataset_data_path,
                                                             st.session_state.dataset_labels_path, 
                                                             size_init_per_class=1)
+                
+                st.session_state['labels'] = st.session_state['dataset'].classes
 
                 st.success('data & labels imported')
             else:

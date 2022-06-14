@@ -65,7 +65,7 @@ class AcLearnDataset():
                 self.X_pool = np.load(data_path_unlab)
                 self.y_pool = None
             
-            self.classes = set(y)
+            self.classes = list(set(y))
             self.nb_class = len(set(y))
             self.image_size = X.shape[-2:]
 

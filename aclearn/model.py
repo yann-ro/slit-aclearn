@@ -1,5 +1,7 @@
 # Internal lib
 from aclearn.acquisition import uniform,max_entropy,bald,variation_ratio
+from sklearn.metrics import plot_confusion_matrix
+from sklearn.metrics import confusion_matrix
 from aclearn.dataset import AcLearnDataset
 from aclearn.estimator import CNN
 # External lib
@@ -97,7 +99,25 @@ class AcLearnModel():
         self.dataset.y_pool = np.delete(self.dataset.y_pool, query_idx, axis=0)
         
         self.acc_history.append(self.learner.score(self.dataset.X_test, self.dataset.y_test))
+
         if train_acc: 
             self.acc_train_history.append(self.learner.score(self.dataset.X_train, self.dataset.y_train))
     
+
+    def plot_confusion(self, labels=None, normalize=None, ax=None, cmap='Blues'):
+        return plot_confusion_matrix(self.learner.estimator, 
+                                     self.dataset.X_test, 
+                                     self.dataset.y_test, 
+                                     labels=labels, 
+                                     normalize=normalize, 
+                                     ax=ax, 
+                                     cmap=cmap)
+
+
+    def evaluate_confusion(self):
+        """
+        """
+        y_pred = self.learner.predict(self.dataset.X_test)
+        return confusion_matrix(self.dataset.y_test, y_pred, labels=None, sample_weight=None, normalize=None)
+
 

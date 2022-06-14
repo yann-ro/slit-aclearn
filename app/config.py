@@ -29,7 +29,7 @@ def set_global_param(key, value, kind=False):
     if key not in st.session_state:
         if kind=='image':
             st.session_state[key] = Image.open(value)
-        if kind=='AcLearnModel':
+        elif kind=='AcLearnModel':
             st.session_state[key] = AcLearnModel(st.session_state[f'al_algo_{value}'],
                                                  st.session_state[f'dataset_{value}'])
         else:
