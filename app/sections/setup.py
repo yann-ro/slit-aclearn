@@ -1,5 +1,6 @@
 from aclearn.dataset import AcLearnDataset
 import streamlit as st
+import torch
 import time
 import copy
 import app
@@ -115,6 +116,8 @@ def task_section():
 
 def models_section():
     
+    st.markdown(f'Cuda available: {torch.cuda.is_available()}')
+
     if st.checkbox('edit models', disabled=st.session_state.setup_finished):
         modify_section_models()
     
