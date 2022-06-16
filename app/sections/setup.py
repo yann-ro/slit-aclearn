@@ -140,7 +140,7 @@ def modify_section_models():
 
     left,_ = st.columns([1,3])
     st.markdown('---')
-    cols = st.columns([1,1,1,1])
+    cols = st.columns([1,1,1,1,1])
 
     with left:
         st.session_state.n_models = st.number_input('number of models', min_value=0, max_value=10, value=0, step=1, format='%i')
@@ -154,6 +154,7 @@ def modify_section_models():
             with cols[1]: st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy ({i})', samp_names)
             with cols[2]: st.session_state[f'n_samp_mod_{i}'] = st.slider(f'N samples for variance estimation ({i}) (not working)', 1, 100)
             with cols[3]: st.session_state[f'pre_trained_model_{i}'] = st.selectbox(f'pre-trained model ({i}) (not working)', [None])
-
+            with cols[4]: st.session_state[f'device_{i}'] = st.selectbox('Device', ['cpu', 'cuda'])
+            
             st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
             app.set_global_param(f'model_{i}', i, kind='AcLearnModel')

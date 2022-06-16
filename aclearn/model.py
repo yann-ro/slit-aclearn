@@ -104,7 +104,7 @@ class AcLearnModel():
             self.acc_train_history.append(self.learner.score(self.dataset.X_train, self.dataset.y_train))
     
 
-    def plot_confusion(self, labels=None, normalize=None, ax=None, cmap='Blues'):
+    def plot_confusion(self, labels=None, normalize=None, ax=None, cmap='viridis'):
         return plot_confusion_matrix(self.learner.estimator, 
                                      self.dataset.X_test, 
                                      self.dataset.y_test, 

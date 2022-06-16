@@ -31,7 +31,8 @@ def set_global_param(key, value, kind=False):
             st.session_state[key] = Image.open(value)
         elif kind=='AcLearnModel':
             st.session_state[key] = AcLearnModel(st.session_state[f'al_algo_{value}'],
-                                                 st.session_state[f'dataset_{value}'])
+                                                 st.session_state[f'dataset_{value}'],
+                                                 st.session_state[f'device_{value}'])
         else:
             st.session_state[key] = value
 
@@ -48,7 +49,6 @@ def init_global_parameters():
     set_global_param('n_models', 0)
     set_global_param('setup_finished', False)
 
-    #set_global_param('ml_algo_1', None)
     set_global_param('n_epochs', None)
     
     #to debug easily

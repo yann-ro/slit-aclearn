@@ -46,8 +46,8 @@ def training_parameters_section():
         st.session_state['oracle'] = st.selectbox('Oracle', ['computer', 'user'])
     with cols[3]:
         st.session_state['query_size'] = st.slider('Query size', 1, 100, 10)
-    with cols[4]:
-        st.session_state['device'] = st.selectbox('Device', ['cpu', 'gpu'])
+    # with cols[4]:
+        # device = st.selectbox('Device', ['cpu', 'gpu'])
     
     if st.session_state['oracle'] == 'computer':
         with cols[5]:
