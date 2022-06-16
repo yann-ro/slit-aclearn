@@ -160,8 +160,9 @@ def modify_section_models():
             with cols[3]: st.session_state[f'pre_trained_model_{i}'] = st.selectbox(f'pre-trained model ({i}) (not working)', [None])
             with cols[4]: st.session_state[f'device_{i}'] = st.selectbox('Device', ['cpu', 'cuda'])
             
-            st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
-            
-            st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
-                                                        st.session_state[f'dataset_{i}'],
-                                                        device = st.session_state[f'device_{i}'])
+            if not st.session_state.setup_finished:
+                st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
+                
+                st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
+                                                            st.session_state[f'dataset_{i}'],
+                                                            device = st.session_state[f'device_{i}'])
