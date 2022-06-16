@@ -1,4 +1,5 @@
 from aclearn.dataset import AcLearnDataset
+from aclearn.model import AcLearnModel
 import streamlit as st
 import torch
 import time
@@ -160,4 +161,7 @@ def modify_section_models():
             with cols[4]: st.session_state[f'device_{i}'] = st.selectbox('Device', ['cpu', 'cuda'])
             
             st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
-            app.set_global_param(f'model_{i}', i, kind='AcLearnModel')
+            
+            st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
+                                                        st.session_state[f'dataset_{i}'],
+                                                        device = st.session_state[f'device_{i}'])

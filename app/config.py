@@ -1,4 +1,3 @@
-from aclearn.model import AcLearnModel
 import matplotlib.pyplot as plt
 import streamlit as st
 from PIL import Image
@@ -29,10 +28,6 @@ def set_global_param(key, value, kind=False):
     if key not in st.session_state:
         if kind=='image':
             st.session_state[key] = Image.open(value)
-        elif kind=='AcLearnModel':
-            st.session_state[key] = AcLearnModel(st.session_state[f'al_algo_{value}'],
-                                                 st.session_state[f'dataset_{value}'],
-                                                 device = st.session_state[f'device_{value}'])
         else:
             st.session_state[key] = value
 
