@@ -32,7 +32,7 @@ def set_global_param(key, value, kind=False):
         elif kind=='AcLearnModel':
             st.session_state[key] = AcLearnModel(st.session_state[f'al_algo_{value}'],
                                                  st.session_state[f'dataset_{value}'],
-                                                 st.session_state[f'device_{value}'])
+                                                 device = st.session_state[f'device_{value}'])
         else:
             st.session_state[key] = value
 

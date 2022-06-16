@@ -28,7 +28,6 @@ class AcLearnModel():
         
         self.is_oracle = is_oracle
         self.dataset = dataset
-        self.device = device
 
         self.estimator = NeuralNetClassifier(CNN,
                                 max_epochs=50,
@@ -38,7 +37,7 @@ class AcLearnModel():
                                 criterion=torch.nn.CrossEntropyLoss,
                                 train_split=None,
                                 verbose=0,
-                                device=self.device)
+                                device=device)
 
         self.acc_history = None
         self.max_accuracy = 0
