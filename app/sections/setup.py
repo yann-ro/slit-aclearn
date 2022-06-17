@@ -164,5 +164,6 @@ def modify_section_models():
                 st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
                 
                 st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
-                                                            st.session_state[f'dataset_{i}'],
-                                                            device = st.session_state[f'device_{i}'])
+                                                              st.session_state[f'dataset_{i}'],
+                                                              model_id=f"model_{i}_{st.session_state[f'al_algo_{i}']}",
+                                                              device = st.session_state[f'device_{i}'])

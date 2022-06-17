@@ -21,12 +21,13 @@ def train_window():
     if retrain:
         progress_bar = st.progress(0)
         for i in range(1, st.session_state.n_models+1):
+            print(f"$({st.session_state[f'model_{i}'].model_id}) train started")
             st.session_state[f'model_{i}'].active_learning_procedure(n_queries=st.session_state['n_epochs'], 
                                                                      query_size=st.session_state['query_size'], 
                                                                      train_acc=True,
                                                                      progress_bar=progress_bar)
             
-            print('$ train finished')
+            print(f"$({st.session_state[f'model_{i}'].model_id}) train finished")
 
         st.success('Model sucessfully retrained')
         
@@ -34,7 +35,7 @@ def train_window():
 
 def training_parameters_section():
 
-    cols = st.columns([1,1,1,1,1,1,1])
+    cols = st.columns([1,1,1,1,1,1])
     with cols[0]:
         st.markdown('Task')
         st.markdown(f"<font color='gray'>{st.session_state.task}", unsafe_allow_html=True)
@@ -46,11 +47,9 @@ def training_parameters_section():
         st.session_state['oracle'] = st.selectbox('Oracle', ['computer', 'user'])
     with cols[3]:
         st.session_state['query_size'] = st.slider('Query size', 1, 100, 10)
-    # with cols[4]:
-        # device = st.selectbox('Device', ['cpu', 'gpu'])
     
     if st.session_state['oracle'] == 'computer':
-        with cols[5]:
+        with cols[4]:
             st.session_state['n_epochs'] = st.number_input('number of epochs', min_value=1, max_value=500, value=2, step=1)
      
 

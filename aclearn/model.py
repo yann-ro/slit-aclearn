@@ -13,19 +13,21 @@ import torch
 
 class AcLearnModel():
 
-    def __init__(self, query_strategy, dataset, is_oracle=False, device='cpu'):
+    def __init__(self, query_strategy, dataset, model_id, is_oracle=False, device='cpu'):
         """
         query_strategy (func):
         is_oracle (bool):
         """
 
-        print('$ init AcLearn model')
+        self.model_id = model_id
+
+        print(f'$({self.model_id}) init AcLearn model')
         if query_strategy == 'Uniform': self.query_strategy = uniform
         elif query_strategy == 'Max_entropy': self.query_strategy = max_entropy
         elif query_strategy == 'Bald': self.query_strategy = bald
         elif query_strategy == 'Var_ratio': self.query_strategy = variation_ratio
         else : print('Not existing query_strategy')
-        
+
         self.is_oracle = is_oracle
         self.dataset = dataset
 
@@ -66,7 +68,7 @@ class AcLearnModel():
         self.acc_history = [self.learner.score(self.dataset.X_test, self.dataset.y_test)]
         self.acc_train_history = [self.learner.score(self.dataset.X_train, self.dataset.y_train)]
 
-        print('$ init_training complete')
+        print(f'$({self.model_id}) init_training complete')
 
 
 
