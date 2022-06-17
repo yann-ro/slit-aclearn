@@ -149,7 +149,7 @@ def modify_section_models():
     with left:
         st.session_state.n_models = st.number_input('number of models', min_value=0, max_value=10, value=0, step=1, format='%i')
     with center:
-        device = st.selectbox(f'Device ({i})', ['cpu', 'cuda'])
+        device = st.selectbox(f'Device', ['cpu', 'cuda'])
 
     if st.session_state.n_models > 0:
         models_cl_names = ['MC_dropout', 'SVC', 'Deep Bayesian Convolutionnal']
