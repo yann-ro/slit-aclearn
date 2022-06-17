@@ -13,8 +13,8 @@ def plot_windows():
     with left:
         plot_accuracy()
     
-    if st.session_state.n_models>0:
-        plot_confusion()
+        if st.session_state.n_models>0:
+            plot_confusion()
         
 
     cols3 = st.columns([6,1,6])
