@@ -158,7 +158,7 @@ def modify_section_models():
             with cols[1]: st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy ({i})', samp_names)
             with cols[2]: st.session_state[f'n_samp_mod_{i}'] = st.slider(f'N samples for variance estimation ({i}) (not working)', 1, 100)
             with cols[3]: st.session_state[f'pre_trained_model_{i}'] = st.selectbox(f'pre-trained model ({i}) (not working)', [None])
-            with cols[4]: st.session_state[f'device_{i}'] = st.selectbox('Device', ['cpu', 'cuda'])
+            with cols[4]: st.session_state[f'device_{i}'] = st.selectbox(f'Device ({i})', ['cpu', 'cuda'])
             
             if not st.session_state.setup_finished:
                 st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
