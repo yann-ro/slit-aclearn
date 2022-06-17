@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix
 import streamlit as st
 import numpy as np
 import matplotlib

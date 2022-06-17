@@ -1,6 +1,6 @@
 # Internal lib
 from aclearn.acquisition import uniform,max_entropy,bald,variation_ratio
-from sklearn.metrics import plot_confusion_matrix
+from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.metrics import confusion_matrix
 from aclearn.dataset import AcLearnDataset
 from aclearn.estimator import CNN
@@ -104,13 +104,13 @@ class AcLearnModel():
     
 
     def plot_confusion(self, labels=None, normalize=None, ax=None, cmap='viridis'):
-        return plot_confusion_matrix(self.learner.estimator, 
-                                     self.dataset.X_test, 
-                                     self.dataset.y_test, 
-                                     labels=labels, 
-                                     normalize=normalize, 
-                                     ax=ax, 
-                                     cmap=cmap)
+        return ConfusionMatrixDisplay.from_estimator(self.learner.estimator, 
+                                                    self.dataset.X_test, 
+                                                    self.dataset.y_test, 
+                                                    labels=labels, 
+                                                    normalize=normalize, 
+                                                    ax=ax, 
+                                                    cmap=cmap)
 
 
     def evaluate_confusion(self):
