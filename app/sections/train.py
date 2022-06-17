@@ -19,9 +19,10 @@ def train_window():
         retrain = st.button('Retrain Model')
     
     if retrain:
+        state = st.empty()
         progress_bar = st.progress(0)
         for i in range(1, st.session_state.n_models+1):
-            st.markdown(f'# <center>model {i}/{st.session_state.n_models+1}</center>', unsafe_allow_html=True)
+            state.markdown(f'<center>model {i}/{st.session_state.n_models}</center>', unsafe_allow_html=True)
             
             print(f"$({st.session_state[f'model_{i}'].model_id}) train started")
             st.session_state[f'model_{i}'].active_learning_procedure(n_queries=st.session_state['n_epochs'], 
