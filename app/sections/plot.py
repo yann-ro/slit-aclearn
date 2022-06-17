@@ -13,9 +13,9 @@ def plot_windows():
     with left:
         plot_accuracy()
     
-    with right:
-        if st.session_state.n_models>0:
-            plot_confusion()
+    if st.session_state.n_models>0:
+        plot_confusion()
+        
 
     cols3 = st.columns([6,1,6])
     save_model = cols3[1].button('Save Model')
@@ -43,7 +43,7 @@ def plot_confusion():
     """    
     n = nrows=st.session_state.n_models
     colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
-    fig, ax = plt.subplots(nrows=n, ncols=1, figsize=(5,5*n))
+    fig, ax = plt.subplots(nrows=n, ncols=1, figsize=(5*n,5))
     
     for i in range(n):
 
