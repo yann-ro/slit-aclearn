@@ -43,7 +43,7 @@ def plot_confusion():
     """    
     n = nrows=st.session_state.n_models
     colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
-    fig, ax = plt.subplots(nrows=1, ncols=n, figsize=(5*n,5))
+    fig, ax = plt.subplots(nrows=1, ncols=n, figsize=(5*n, 4))
     
     for i in range(n):
 
