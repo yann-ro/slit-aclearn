@@ -41,10 +41,11 @@ def plot_accuracy():
 def plot_confusion():
     """
     """    
+    n = nrows=st.session_state.n_models
     colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
-    fig, ax = plt.subplots(nrows=st.session_state.n_models, ncols=1)
+    fig, ax = plt.subplots(nrows=n, ncols=1, figsize=(5,5*n))
     
-    for i in range(st.session_state.n_models):
+    for i in range(n):
 
         ax[i].set_title('Confusion matrix on test set')
         c_1 = matplotlib.colors.colorConverter.to_rgba('white', alpha = 1)
