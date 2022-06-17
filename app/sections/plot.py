@@ -48,8 +48,8 @@ def plot_confusion():
     for i in range(n):
 
         ax[i].set_title('Confusion matrix on test set')
-        c_1 = matplotlib.colors.colorConverter.to_rgba('white', alpha = 1)
-        c_2= matplotlib.colors.colorConverter.to_rgba(colors[i], alpha = 0.4)
+        c_1 = matplotlib.colors.colorConverter.to_rgba('white', alpha = 0)
+        c_2= matplotlib.colors.colorConverter.to_rgba(colors[i], alpha = 1)
         cmap = matplotlib.colors.LinearSegmentedColormap.from_list('rb_cmap', [c_1, c_2], 512)
 
         st.session_state[f'model_{i+1}'].plot_confusion(ax=ax[i], cmap=cmap)
