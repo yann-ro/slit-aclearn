@@ -21,6 +21,8 @@ def train_window():
     if retrain:
         progress_bar = st.progress(0)
         for i in range(1, st.session_state.n_models+1):
+            st.markdown(f'# <center>model {i}/{st.session_state.n_models+1}</center>', unsafe_allow_html=True)
+            
             print(f"$({st.session_state[f'model_{i}'].model_id}) train started")
             st.session_state[f'model_{i}'].active_learning_procedure(n_queries=st.session_state['n_epochs'], 
                                                                      query_size=st.session_state['query_size'], 

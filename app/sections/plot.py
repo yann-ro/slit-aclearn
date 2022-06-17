@@ -15,7 +15,7 @@ def plot_windows():
     
     with right:
         if st.session_state.n_models>0:
-            plot_confusion(st.session_state['model_1'])
+            plot_confusion()
 
     cols3 = st.columns([6,1,6])
     save_model = cols3[1].button('Save Model')
@@ -27,26 +27,29 @@ def plot_accuracy():
     """
     """
     
-    fig1, ax1 = plt.subplots()
+    fig, ax = plt.subplots()
     for i in range(1, st.session_state.n_models+1):
-        ax1.plot(st.session_state[f'model_{i}'].acc_history, label=f"acc model {i} ({st.session_state[f'al_algo_{i}']})")
+        ax.plot(st.session_state[f'model_{i}'].acc_history, label=f"acc model {i} ({st.session_state[f'al_algo_{i}']})")
     
     plt.title('Accuracy on test set')
     plt.grid(alpha=0.3, linestyle='--')
     plt.legend()
-    st.write(fig1)
+    st.write(fig)
 
 
 
-def plot_confusion(model):
+def plot_confusion():
     """
     """    
+    colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
+    fig, ax = plt.subplots(nrows=st.session_state.n_models, ncols=1)
     
-    fig2, ax2 = plt.subplots()
-    ax2.set_title('Confusion matrix on test set')
-    c_1 = matplotlib.colors.colorConverter.to_rgba('white', alpha = 1)
-    c_2= matplotlib.colors.colorConverter.to_rgba('tab:blue', alpha = 0.4)
-    cmap = matplotlib.colors.LinearSegmentedColormap.from_list('rb_cmap', [c_1, c_2], 512)
+    for i in range(1, st.session_state.n_models+1):
 
-    model.plot_confusion(ax=ax2, cmap=cmap)
-    st.pyplot(fig2)
+        ax[i].set_title('Confusion matrix on test set')
+        c_1 = matplotlib.colors.colorConverter.to_rgba('white', alpha = 1)
+        c_2= matplotlib.colors.colorConverter.to_rgba(colors[i], alpha = 0.4)
+        cmap = matplotlib.colors.LinearSegmentedColormap.from_list('rb_cmap', [c_1, c_2], 512)
+
+        st.session_state[f'model_{i}'].plot_confusion(ax=ax[i], cmap=cmap)
+    st.pyplot(fig)
