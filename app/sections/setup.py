@@ -142,12 +142,14 @@ def models_section():
 
 def modify_section_models():
 
-    left,_ = st.columns([1,3])
+    left,center,_ = st.columns([1,1,2])
     st.markdown('---')
-    cols = st.columns([1,1,1,1,1])
+    cols = st.columns([1,1,1,1])
 
     with left:
         st.session_state.n_models = st.number_input('number of models', min_value=0, max_value=10, value=0, step=1, format='%i')
+    with center:
+        device = st.selectbox(f'Device ({i})', ['cpu', 'cuda'])
 
     if st.session_state.n_models > 0:
         models_cl_names = ['MC_dropout', 'SVC', 'Deep Bayesian Convolutionnal']
@@ -158,12 +160,11 @@ def modify_section_models():
             with cols[1]: st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy ({i})', samp_names)
             with cols[2]: st.session_state[f'n_samp_mod_{i}'] = st.slider(f'N samples for variance estimation ({i}) (not working)', 1, 100)
             with cols[3]: st.session_state[f'pre_trained_model_{i}'] = st.selectbox(f'pre-trained model ({i}) (not working)', [None])
-            with cols[4]: st.session_state[f'device_{i}'] = st.selectbox(f'Device ({i})', ['cpu', 'cuda'])
             
             if not st.session_state.setup_finished:
                 st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
                 
                 st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
                                                               st.session_state[f'dataset_{i}'],
-                                                              model_id=f"model_{i}_{st.session_state[f'al_algo_{i}']}",
-                                                              device = st.session_state[f'device_{i}'])
+                                                              model_id = f"model_{i}_{st.session_state[f'al_algo_{i}']}",
+                                                              device = device)
