@@ -45,12 +45,22 @@ def plot_confusion():
     colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
     fig, ax = plt.subplots(nrows=1, ncols=n, figsize=(5*n, 4))
     
-    for i in range(n):
+    if n>1:
+        for i in range(n):
+            ax[i].set_title('Confusion matrix on test set')
 
-        ax[i].set_title('Confusion matrix on test set')
+            c_1 = matplotlib.colors.colorConverter.to_rgba('black', alpha = 1)
+            c_2 = matplotlib.colors.colorConverter.to_rgba(colors[i], alpha = 1)
+            cmap = matplotlib.colors.LinearSegmentedColormap.from_list('rb_cmap', [c_1, c_2], 512)
+
+            st.session_state[f'model_{i+1}'].plot_confusion(ax=ax[i], cmap=cmap)
+    else:
+        ax.set_title('Confusion matrix on test set')
+
         c_1 = matplotlib.colors.colorConverter.to_rgba('black', alpha = 1)
-        c_2= matplotlib.colors.colorConverter.to_rgba(colors[i], alpha = 1)
+        c_2= matplotlib.colors.colorConverter.to_rgba(colors[0], alpha = 1)
         cmap = matplotlib.colors.LinearSegmentedColormap.from_list('rb_cmap', [c_1, c_2], 512)
 
-        st.session_state[f'model_{i+1}'].plot_confusion(ax=ax[i], cmap=cmap)
+        st.session_state[f'model_1'].plot_confusion(ax=ax, cmap=cmap)
+
     st.pyplot(fig)
