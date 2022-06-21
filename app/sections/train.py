@@ -31,15 +31,15 @@ def train_window():
                                                                      progress_bar=progress_bar)
             print(f"$({st.session_state[f'model_{i}'].model_id}) train finished")
             
+            state.markdown(f'<center>compute t-SNE ({i}) ...</center>', unsafe_allow_html=True)
             st.session_state[f'model_{i}'].compute_tsne()
-            state.markdown(f'<center>tsne {i}</center>', unsafe_allow_html=True)
             print(f"$({st.session_state[f'model_{i}'].model_id}) tsne computed")
             
-            state.markdown(f'<center>pca {i}</center>', unsafe_allow_html=True)
+            state.markdown(f'<center>compute PCA ({i}) ...</center>', unsafe_allow_html=True)
             st.session_state[f'model_{i}'].compute_pca()
             print(f"$({st.session_state[f'model_{i}'].model_id}) pca computed")
 
-            state.markdown(f'<center>figure {i}</center>', unsafe_allow_html=True)
+            state.markdown(f'<center>compute figure {i} ...</center>', unsafe_allow_html=True)
             st.session_state[f'model_{i}'].compute_emb_figure()
             print(f"$({st.session_state[f'model_{i}'].model_id}) embedding figure computed")
 
