@@ -3,6 +3,7 @@ import streamlit as st
 import numpy as np
 import matplotlib
 
+
 def plot_windows():
     """
     """
@@ -15,7 +16,10 @@ def plot_windows():
     
         if st.session_state.n_models>0:
             plot_confusion()
-        
+
+            st.pyplot(st.session_state[f'model_1'].emb_fig)     
+
+
 
     cols3 = st.columns([6,1,6])
     save_model = cols3[1].button('Save Model')

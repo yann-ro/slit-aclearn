@@ -29,8 +29,19 @@ def train_window():
                                                                      query_size=st.session_state['query_size'], 
                                                                      train_acc=True,
                                                                      progress_bar=progress_bar)
-            
             print(f"$({st.session_state[f'model_{i}'].model_id}) train finished")
+            
+            st.session_state[f'model_{i}'].compute_tsne()
+            state.markdown(f'<center>tsne {i}</center>', unsafe_allow_html=True)
+            print(f"$({st.session_state[f'model_{i}'].model_id}) tsne computed")
+            
+            state.markdown(f'<center>pca {i}</center>', unsafe_allow_html=True)
+            st.session_state[f'model_{i}'].compute_pca()
+            print(f"$({st.session_state[f'model_{i}'].model_id}) pca computed")
+
+            state.markdown(f'<center>figure {i}</center>', unsafe_allow_html=True)
+            st.session_state[f'model_{i}'].compute_emb_figure()
+            print(f"$({st.session_state[f'model_{i}'].model_id}) embedding figure computed")
 
         st.success('Model sucessfully retrained')
         
