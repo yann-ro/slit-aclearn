@@ -7,7 +7,7 @@ import numpy as np
 
 
 class AcLearnDataset():
-    def __init__(self, data_path, label_path=None, data_path_unlab=None, size_init_per_class=1):
+    def __init__(self, data_path, label_path=None, data_path_unlab=None, size_init_per_class=2):
         """
         """
 
