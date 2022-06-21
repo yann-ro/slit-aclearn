@@ -149,8 +149,8 @@ class AcLearnModel():
     def compute_tsne(self):
         """
         """
-        X = self.dataset.X_train.flatten()
-        y = self.dataset.y_train.flatten()
+        X = self.dataset.X_train
+        y = self.dataset.y_train
         print(X.shape)
         print(y.shape)
 
