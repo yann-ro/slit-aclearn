@@ -253,6 +253,8 @@ def plot_results(X_train, y_train, X_selected, y_selected, X_pool, tsne=None, pc
         x2d_selected_tsne = tsne.transform(X_selected)
         x2d_pool_tsne = tsne.transform(X_pool)
         
+        print(x2d_train_tsne.shape)
+        
         confidence_ellipse(x2d_train_tsne, y_train, ax[0], n_std=2, cm=cm.magma, alpha=0.4)
         
         ax[0].scatter(x2d_pool_tsne[:,0], x2d_pool_tsne[:,1], color='gray', alpha=0.05)
