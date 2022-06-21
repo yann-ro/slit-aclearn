@@ -149,9 +149,13 @@ class AcLearnModel():
     def compute_tsne(self):
         """
         """
+        X = self.dataset.X_train.flatten()
+        y = self.dataset.y_train.flattend()
+        print(X.shape)
+        print(y.shape)
 
         self.tsne = PredictableTSNE(transformer=TSNE(n_iter=1000, init='random', learning_rate='auto'))
-        self.tsne.fit(self.dataset.X_train, self.dataset.y_train)
+        self.tsne.fit(X, y)
     
     
 
