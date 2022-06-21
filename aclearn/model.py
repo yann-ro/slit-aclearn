@@ -73,9 +73,9 @@ class AcLearnModel():
         """
 
         self.learner = ActiveLearner(estimator=self.estimator,
-                                X_training = self.dataset.X_init,
-                                y_training = self.dataset.y_init,
-                                query_strategy = self.query_strategy)
+                                    X_training = self.dataset.X_init,
+                                    y_training = self.dataset.y_init,
+                                    query_strategy = self.query_strategy)
 
         self.acc_history = [self.learner.score(self.dataset.X_test, self.dataset.y_test)]
         self.acc_train_history = [self.learner.score(self.dataset.X_train, self.dataset.y_train)]
@@ -151,7 +151,7 @@ class AcLearnModel():
         """
         X = self.dataset.X_train
         y = self.dataset.y_train
-        print(self.dataset.X_train.shape)
+        print(self.learner.X_training.shape)
         print(self.dataset.X_init.shape)
         print(self.dataset.X_pool.shape)
 
