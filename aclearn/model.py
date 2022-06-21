@@ -246,7 +246,7 @@ def plot_results(X_train, y_train, X_selected, y_selected, X_pool, tsne=None, pc
     """
     """
     
-    fig, ax = plt.subplots(1, 2, figsize=(30, 10))
+    fig, ax = plt.subplots(2, 1, figsize=(10, 30))
     
     if tsne:
         x2d_train_tsne = tsne.transform(X_train)
@@ -268,6 +268,6 @@ def plot_results(X_train, y_train, X_selected, y_selected, X_pool, tsne=None, pc
         
         ax[1].scatter(x2d_pool_pca[:,0], x2d_pool_pca[:,1], color='gray', alpha=0.05)
         ax[1].scatter(x2d_selected_pca[:,0], x2d_selected_pca[:,1], c=y_selected, cmap='magma')
-        ax[0].set_title('PCA')
+        ax[1].set_title('PCA')
 
     return fig

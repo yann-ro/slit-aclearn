@@ -145,7 +145,7 @@ def modify_section_models():
     cols = st.columns([1,1,1,1])
 
     with left:
-        st.session_state.n_models = st.number_input('number of models', min_value=0, max_value=10, value=0, step=1, format='%i')
+        st.session_state.n_models = st.number_input('number of models', min_value=0, max_value=10, value=1, step=1, format='%i')
     with center:
         device = st.selectbox(f'Device', torch.cuda.is_available()*['cuda']+['cpu'])
 
