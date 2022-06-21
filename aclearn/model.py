@@ -112,10 +112,10 @@ class AcLearnModel():
         
         query_idx, query_instance = self.learner.query(self.dataset.X_pool, query_size)
 
-        self.dataset.X_query = self.dataset.X_pool[query_idx]
-        self.dataset.y_query = self.dataset.y_pool[query_idx]
+        self.X_query = self.dataset.X_pool[query_idx]
+        self.y_query = self.dataset.y_pool[query_idx]
         
-        self.learner.teach(self.dataset.X_query, self.dataset.y_query)
+        self.learner.teach(self.X_query, self.y_query)
         self.dataset.X_pool = np.delete(self.dataset.X_pool, query_idx, axis=0)
         self.dataset.y_pool = np.delete(self.dataset.y_pool, query_idx, axis=0)
         
@@ -150,7 +150,7 @@ class AcLearnModel():
         """
         """
         X = self.learner.X_training.reshape(len(self.learner.X_training), -1)
-        y = self.learner.y_training.reshape(len(self.learner.y_training), -1)
+        y = self.learner.y_training
 
         self.tsne = PredictableTSNE(transformer=TSNE(n_iter=1000, init='random', learning_rate='auto'))
         self.tsne.fit(X, y)
@@ -161,7 +161,7 @@ class AcLearnModel():
         """
         """
         X = self.learner.X_training.reshape(len(self.learner.X_training), -1)
-        y = self.learner.y_training.reshape(len(self.learner.y_training), -1)
+        y = self.learner.y_training
 
         self.pca = PCA().fit(X, y)
 
@@ -170,11 +170,17 @@ class AcLearnModel():
         """
         """
 
-        self.emb_fig = plot_results(self.dataset.X_train, 
-                                    self.dataset.y_train, 
-                                    self.dataset.X_query, 
-                                    self.dataset.y_query, 
-                                    self.dataset.X_pool, 
+        X_train = self.learner.X_training.reshape(len(self.learner.X_training), -1)
+        y_train = self.learner.y_training
+        X_query = self.X_query
+        y_query = self.y_query
+        X_pool = self.dataset.X_pool.reshape(len(self.dataset.X_pool), -1)
+
+        self.emb_fig = plot_results(X_train, 
+                                    y_train, 
+                                    X_query, 
+                                    y_query, 
+                                    X_pool, 
                                     tsne=self.tsne, 
                                     pca=self.pca)
 
