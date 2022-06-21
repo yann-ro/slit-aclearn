@@ -181,7 +181,7 @@ class AcLearnModel():
                                     X_query, 
                                     y_query, 
                                     X_pool, 
-                                    #tsne=self.tsne, 
+                                    tsne=self.tsne, 
                                     #pca=self.pca
                                     )
 
@@ -247,8 +247,6 @@ def plot_results(X_train, y_train, X_selected, y_selected, X_pool, tsne=None, pc
     """
     
     fig, ax = plt.subplots(1, 2, figsize=(30, 10))
-
-    ax[0].scatter(np.arange(10), np.arange(10))
     
     if tsne:
         x2d_train_tsne = tsne.transform(X_train)
