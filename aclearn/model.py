@@ -152,7 +152,7 @@ class AcLearnModel():
         X = self.learner.X_training.reshape(len(self.learner.X_training), -1)
         y = self.learner.y_training
 
-        self.tsne = PredictableTSNE(transformer=TSNE(n_iter=1000, init='random', learning_rate='auto'))
+        self.tsne = PredictableTSNE(transformer=TSNE(n_iter=1000, init='pca', learning_rate='auto'))
         self.tsne.fit(X, y)
     
     
