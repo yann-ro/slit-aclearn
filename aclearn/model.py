@@ -162,8 +162,8 @@ class AcLearnModel():
         """
         X = self.learner.X_training.reshape(len(self.learner.X_training), -1)
         y = self.learner.y_training.reshape(len(self.learner.y_training), -1)
-        
-        self.pca = PCA().fit(X=self.dataset.X_train, y=self.dataset.y_train)
+
+        self.pca = PCA().fit(X, y)
 
     
     def compute_emb_figure(self):
