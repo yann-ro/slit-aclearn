@@ -172,9 +172,13 @@ class AcLearnModel():
 
         X_train = self.learner.X_training.reshape(len(self.learner.X_training), -1)
         y_train = self.learner.y_training
-        X_query = self.X_query
+        X_query = self.X_query.reshape(len(self.X_query), -1)
         y_query = self.y_query
         X_pool = self.dataset.X_pool.reshape(len(self.dataset.X_pool), -1)
+
+        print(X_train.shape)
+        print(X_query.shape)
+        print(X_pool.shape)
 
         self.emb_fig = plot_results(X_train, 
                                     y_train, 
