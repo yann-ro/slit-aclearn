@@ -151,18 +151,18 @@ class AcLearnModel():
         """
         X = self.learner.X_training.reshape(len(self.learner.X_training), -1)
         y = self.learner.y_training.reshape(len(self.learner.y_training), -1)
-        print(X.shape)
-        print(y.shape)
 
         self.tsne = PredictableTSNE(transformer=TSNE(n_iter=1000, init='random', learning_rate='auto'))
         self.tsne.fit(X, y)
     
     
 
-    def computer_pca(self):
+    def compute_pca(self):
         """
         """
-
+        X = self.learner.X_training.reshape(len(self.learner.X_training), -1)
+        y = self.learner.y_training.reshape(len(self.learner.y_training), -1)
+        
         self.pca = PCA().fit(X=self.dataset.X_train, y=self.dataset.y_train)
 
     
