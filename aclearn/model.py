@@ -246,7 +246,7 @@ def plot_results(X_train, y_train, X_selected, y_selected, X_pool, tsne=None, pc
     """
     """
     
-    fig, ax = plt.subplots(2, 1, figsize=(10, 30))
+    fig, ax = plt.subplots(2, 1, figsize=(10, 20))
     
     if tsne:
         x2d_train_tsne = tsne.transform(X_train)
