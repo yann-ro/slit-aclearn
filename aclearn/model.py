@@ -150,7 +150,7 @@ class AcLearnModel():
         """
         """
         X = self.dataset.X_train.flatten()
-        y = self.dataset.y_train.flattend()
+        y = self.dataset.y_train.flatten()
         print(X.shape)
         print(y.shape)
 
