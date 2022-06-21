@@ -182,7 +182,7 @@ class AcLearnModel():
                                     y_query, 
                                     X_pool, 
                                     tsne=self.tsne, 
-                                    #pca=self.pca
+                                    pca=self.pca
                                     )
 
 
