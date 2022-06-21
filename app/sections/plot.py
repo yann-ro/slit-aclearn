@@ -16,7 +16,6 @@ def plot_windows():
     
         if st.session_state.n_models>0:
             plot_confusion()
-
             st.write(st.session_state[f'model_1'].emb_fig)     
 
 

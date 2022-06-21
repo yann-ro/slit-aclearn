@@ -181,8 +181,9 @@ class AcLearnModel():
                                     X_query, 
                                     y_query, 
                                     X_pool, 
-                                    tsne=self.tsne, 
-                                    pca=self.pca)
+                                    #tsne=self.tsne, 
+                                    #pca=self.pca
+                                    )
 
 
 
@@ -245,12 +246,14 @@ def plot_results(X_train, y_train, X_selected, y_selected, X_pool, tsne=None, pc
     """
     """
     
+    fig, ax = plt.subplots(1, 2, figsize=(30, 10))
+
+    ax[0].scatter(np.arange(10), np.arange(10))
+    
     if tsne:
         x2d_train_tsne = tsne.transform(X_train)
         x2d_selected_tsne = tsne.transform(X_selected)
         x2d_pool_tsne = tsne.transform(X_pool)
-
-        fig, ax = plt.subplots(1, 2, figsize=(30, 10))
         
         confidence_ellipse(x2d_train_tsne, y_train, ax[0], n_std=2, cm=cm.magma, alpha=0.4)
         
