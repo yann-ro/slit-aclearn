@@ -18,8 +18,8 @@ def plot_windows():
             plot_confusion()
     
     with right:
-        selected_model = st.selectbox('Select model',[f'model {i+1}' for i in range(st.session_state.n_models)])
-        st.write(st.session_state[f'model_{selected_model}'].emb_fig)     
+        selected_model = st.selectbox('Select model',[f'model_{i+1}' for i in range(st.session_state.n_models)])
+        st.write(st.session_state[selected_model].emb_fig)     
 
 
 
