@@ -18,7 +18,8 @@ def plot_windows():
             plot_confusion()
     
     with right:
-        st.write(st.session_state[f'model_1'].emb_fig)     
+        selected_model = st.radio('Select model',[i+1 for i in range(st.session_state.n_models)])
+        st.write(st.session_state[f'model_{selected_model}'].emb_fig)     
 
 
 
