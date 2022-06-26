@@ -61,9 +61,9 @@ def plot_acc_variance(i):
     df = pd.DataFrame(acc, columns=np.arange(n_epochs)).melt()
 
     sns.lineplot(data=df, x='variable', y='value', estimator=np.mean, ci='sd', label=f"acc model {i} ({st.session_state[f'al_algo_{i}']}) [x{n_samp}]")
-    #sns.lineplot(data=df, x='variable', y='value', estimator=np.mean, color='orange')
-    #sns.lineplot(data=df, x='variable', y='value', estimator=np.min, linestyle='--', ci=None, color='orange', alpha=0.5)
-    #sns.lineplot(data=df, x='variable', y='value', estimator=np.max, linestyle='--', ci=None, color='orange', alpha=0.5)
+    sns.lineplot(data=df, x='variable', y='value', estimator=np.mean,  ci=50, color='orange')
+    sns.lineplot(data=df, x='variable', y='value', estimator=np.min, linestyle='--', ci=None, color='orange', alpha=0.5)
+    sns.lineplot(data=df, x='variable', y='value', estimator=np.max, linestyle='--', ci=None, color='orange', alpha=0.5)
 
 
 
