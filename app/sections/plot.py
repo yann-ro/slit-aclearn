@@ -19,7 +19,7 @@ def plot_windows():
     
     with right:
         
-        models = [f'model_{i+1}' if st.session_state[f'n_samp_mod_{i}']==1 else f'model_{i+1}.0' for i in range(st.session_state.n_models)]
+        models = [f'model_{i+1}' if st.session_state[f'n_samp_mod_{i+1}']==1 else f'model_{i+1}.0' for i in range(st.session_state.n_models)]
         model_name = st.selectbox('Select model', models)
         
         plot_2D_feature_space(model_name)
