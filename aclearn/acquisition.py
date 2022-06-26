@@ -9,7 +9,11 @@ def uniform(learner, X, query_size=1):
 
 
 def max_entropy(learner, X, query_size=1, T=100):
+    
+    print('lenX', len(X))
     random_subset = np.random.choice(range(len(X)), size=2000, replace=False)
+    
+
     with torch.no_grad():
         outputs = np.stack([torch.softmax(learner.estimator.forward(X[random_subset], training=True),dim=-1).cpu().numpy()
                             for t in range(100)])
@@ -22,7 +26,9 @@ def max_entropy(learner, X, query_size=1, T=100):
 
 
 def bald(learner, X, query_size=1, T=100):
+    
     random_subset = np.random.choice(range(len(X)), size=2000, replace=False)
+    
     with torch.no_grad():
         outputs = np.stack([torch.softmax(learner.estimator.forward(X[random_subset], training=True),dim=-1).cpu().numpy()
                             for t in range(100)])
@@ -37,7 +43,9 @@ def bald(learner, X, query_size=1, T=100):
 
 
 def variation_ratio(learner, X, n_instances=1, T=100):
+    
     random_subset= np.random.choice(range(len(X)), size=2000, replace=False)
+    
     with torch.no_grad():
         outputs = np.stack([torch.softmax(learner.estimator.forward(X[random_subset], training=True), dim=-1).cpu().numpy()
                             for t in range(100)])  # p(y=c|x, w)
