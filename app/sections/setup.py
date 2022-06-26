@@ -129,35 +129,34 @@ def models_section():
             with cols[2]: 
                 st.markdown(f"**sampling strategy**<br/><font color='gray'>{st.session_state[f'al_algo_{i}']}", unsafe_allow_html=True)
                 with st.expander("See explanation"): st.write("...")
-            
-            #with cols[3]: 
-            #    st.markdown(f"**pre-trained model **<br/><font color='gray'>{st.session_state[f'pre_trained_model_{i}']}", unsafe_allow_html=True)
 
 
 
 def modify_section_models():
 
-    left,center,_ = st.columns([1,1,2])
+    left, center, right, _ = st.columns([1,1,1,1])
     st.markdown('---')
     cols = st.columns([1,1,1,1])
 
     with left:
         st.session_state.n_models = st.number_input('number of models', min_value=0, max_value=10, value=1, step=1, format='%i')
-        st.session_state['fixed_data_init'] = st.checkbox('fixed data init', value=True)
     with center:
         st.session_state['device'] = st.selectbox(f'Device', torch.cuda.is_available()*['cuda']+['cpu'])
+    with right:
+        st.session_state['fixed_data_init'] = st.checkbox('fixed data init', value=True)
 
     if st.session_state.n_models > 0:
-        models_cl_names = ['MC_dropout', 'SVC', 'Deep Bayesian Convolutionnal']
+        models_cl_names = ['MC_dropout']
         samp_names = ['Random', 'Max_entropy', 'Bald', 'Var_ratio']
 
         for i in range(1, st.session_state.n_models+1):
-            with cols[0]: st.session_state[f'ml_algo_{i}'] = st.selectbox(f'ml algorithm ({i}) (only MC_dropout)', models_cl_names)
-            with cols[1]: st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy ({i})', samp_names).lower()
-            with cols[2]: st.session_state[f'n_samp_mod_{i}'] = st.number_input(f'N samples for variance estimation ({i})', 
+            with cols[0]: st.markdown(f"**Model {i}**)", unsafe_allow_html=True)
+            with cols[1]: st.session_state[f'ml_algo_{i}'] = st.selectbox(f'ml algorithm ({i}) (only MC_dropout)', models_cl_names)
+            with cols[2]: st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy ({i})', samp_names).lower()
+            with cols[3]: st.session_state[f'n_samp_mod_{i}'] = st.number_input(f'N samples for variance estimation ({i})', 
                                                                                 min_value=1, 
                                                                                 max_value=100)
-            #with cols[3]: st.session_state[f'pre_trained_model_{i}'] = st.selectbox(f'pre-trained model ({i})', [None])
+
 
 
 def init_models():
