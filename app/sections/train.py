@@ -26,17 +26,17 @@ def train_window():
             if st.session_state[f'n_samp_mod_{i}']>1:
                 for j in range(st.session_state[f'n_samp_mod_{i}']):
                     state.markdown(f"<center>model {i}/{st.session_state.n_models} [{j+1}/{st.session_state[f'n_samp_mod_{i}']}]</center>", unsafe_allow_html=True)
-                train(f'model_{i}.{j}', msg, progress_bar)
+                training(f'model_{i}.{j}', msg, progress_bar)
             
             else:
                 state.markdown(f'<center>model {i}/{st.session_state.n_models}</center>', unsafe_allow_html=True)
-                train(f'model_{i}', msg, progress_bar)
+                training(f'model_{i}', msg, progress_bar)
 
         st.success('Model sucessfully retrained')
         
 
 
-def train(model_name, msg, progress_bar):
+def training(model_name, msg, progress_bar):
 
     print(f"$({st.session_state[model_name].model_id}) train started")
     msg.markdown('train ...')
