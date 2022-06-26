@@ -1,3 +1,4 @@
+from pickle import FALSE, TRUE
 from streamlit_drawable_canvas import st_canvas
 import matplotlib.pyplot as plt
 import streamlit as st
@@ -26,20 +27,20 @@ def train_window():
             if st.session_state[f'n_samp_mod_{i}']>1:
                 for j in range(st.session_state[f'n_samp_mod_{i}']):
                     state.markdown(f"<center>model {i}/{st.session_state.n_models} [{j+1}/{st.session_state[f'n_samp_mod_{i}']}]</center>", unsafe_allow_html=True)
-                training(f'model_{i}.{j}', msg, progress_bar)
+                training(f'model_{i}.{j}', msg, progress_bar, tsne=False, pca=False)
             
             else:
                 state.markdown(f'<center>model {i}/{st.session_state.n_models}</center>', unsafe_allow_html=True)
-                training(f'model_{i}', msg, progress_bar)
+                training(f'model_{i}', msg, progress_bar, tsne=False, pca=True)
 
         st.success('Model sucessfully retrained')
         
 
 
-def training(model_name, msg, progress_bar):
+def training(model_name, msg, progress_bar, tsne=True, pca=True):
 
     print(f"$({st.session_state[model_name].model_id}) train started")
-    msg.markdown('train ...')
+    msg.markdown('<center>train ...</center>', unsafe_allow_html=True)
     st.session_state[model_name].active_learning_procedure(n_queries=st.session_state['n_epochs'], 
                                                             query_size=st.session_state['query_size'], 
                                                             train_acc=True,
@@ -47,13 +48,15 @@ def training(model_name, msg, progress_bar):
 
     print(f"$({st.session_state[model_name].model_id}) train finished")
     
-    msg.markdown(f'<center>compute t-SNE ...</center>', unsafe_allow_html=True)
-    st.session_state[model_name].compute_tsne()
-    print(f"$({st.session_state[model_name].model_id}) tsne computed")
+    if tsne:
+        msg.markdown(f'<center>compute t-SNE ...</center>', unsafe_allow_html=True)
+        st.session_state[model_name].compute_tsne()
+        print(f"$({st.session_state[model_name].model_id}) tsne computed")
     
-    msg.markdown(f'<center>compute PCA ...</center>', unsafe_allow_html=True)
-    st.session_state[model_name].compute_pca()
-    print(f"$({st.session_state[model_name].model_id}) pca computed")
+    if pca:
+        msg.markdown(f'<center>compute PCA ...</center>', unsafe_allow_html=True)
+        st.session_state[model_name].compute_pca()
+        print(f"$({st.session_state[model_name].model_id}) pca computed")
 
     msg.markdown(f'<center>compute figure ...</center>', unsafe_allow_html=True)
     st.session_state[model_name].compute_emb_figure()
