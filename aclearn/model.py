@@ -115,6 +115,7 @@ class AcLearnModel():
         """
         """
         
+        print('fwd query size', query_size)
         print('X_pool size: ', self.dataset.X_pool.shape)
 
         query_idx, query_instance = self.learner.query(self.dataset.X_pool, query_size)
