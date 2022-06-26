@@ -21,12 +21,12 @@ def train_window():
     if retrain:
         state = st.empty()
         msg = st.empty()
-        progress_bar = st.progress(0)
+        progress_bar = (st.progress(0.), 0., 1.)
         for i in range(1, st.session_state.n_models+1):
             if st.session_state[f'n_samp_mod_{i}']>1:
                 for j in range(st.session_state[f'n_samp_mod_{i}']):
                     state.markdown(f"<center>model {i}/{st.session_state.n_models}<br>sample [{j+1}/{st.session_state[f'n_samp_mod_{i}']}]</center>", unsafe_allow_html=True)
-                    training(f'model_{i}.{j}', msg, progress_bar, tsne=False, pca=False)
+                    training(f'model_{i}.{j}', msg, progress_bar, tsne=False, pca=True)
             
             else:
                 state.markdown(f'<center>model {i}/{st.session_state.n_models}</center>', unsafe_allow_html=True)
@@ -39,7 +39,7 @@ def train_window():
 def training(model_name, msg, progress_bar, tsne=True, pca=True):
 
     print(f"$({st.session_state[model_name].model_id}) train started")
-    msg.markdown('<center>train ...</center>', unsafe_allow_html=True)
+    msg.markdown("<center><font color='gray'>train..</center>", unsafe_allow_html=True)
     st.session_state[model_name].active_learning_procedure(n_queries=st.session_state['n_epochs'], 
                                                             query_size=st.session_state['query_size'], 
                                                             train_acc=True,
@@ -48,12 +48,12 @@ def training(model_name, msg, progress_bar, tsne=True, pca=True):
     print(f"$({st.session_state[model_name].model_id}) train finished")
     
     if tsne:
-        msg.markdown(f'<center>compute t-SNE ...</center>', unsafe_allow_html=True)
+        msg.markdown(f"<center><font color='gray'>compute t-SNE..</center>", unsafe_allow_html=True)
         st.session_state[model_name].compute_tsne()
         print(f"$({st.session_state[model_name].model_id}) tsne computed")
     
     if pca:
-        msg.markdown(f'<center>compute PCA ...</center>', unsafe_allow_html=True)
+        msg.markdown(f"<center><font color='gray'>compute PCA..</center>", unsafe_allow_html=True)
         st.session_state[model_name].compute_pca()
         print(f"$({st.session_state[model_name].model_id}) pca computed")
 
@@ -80,7 +80,7 @@ def training_parameters_section():
     
     if st.session_state['oracle'] == 'computer':
         with cols[4]:
-            st.session_state['n_epochs'] = st.number_input('number of epochs', min_value=1, max_value=500, value=2, step=1)
+            st.session_state['n_epochs'] = st.number_input('number of epochs', 1, 500, 8, step=1)
      
 
 

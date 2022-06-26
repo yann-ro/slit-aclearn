@@ -101,7 +101,8 @@ class AcLearnModel():
                     print(f'\t(query {self.index_epoch}) Test acc: \t{self.acc_history[ self.index_epoch]:0.4f}')
                 
                 if progress_bar:
-                    progress_bar.progress(int((i+1)/n_queries*100))
+                    bar, min_bar, max_bar = progress_bar
+                    bar.progress(min_bar+(i+1)/n_queries*(max_bar-min_bar))
 
         elif self.oracle=='human':
             print('MODE not implemented yet')
