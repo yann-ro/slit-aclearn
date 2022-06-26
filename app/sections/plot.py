@@ -78,7 +78,7 @@ def plot_confusion():
             c_2 = matplotlib.colors.colorConverter.to_rgba(colors[i], alpha = 1)
             cmap = matplotlib.colors.LinearSegmentedColormap.from_list('rb_cmap', [c_1, c_2], 512)
             
-            if st.session_state[f'n_samp_mod_{i}']>1:
+            if st.session_state[f'n_samp_mod_{i+1}']>1:
                 st.session_state[f'model_{i+1}.0'].plot_confusion(ax=ax[i], cmap=cmap)
             else:
                 st.session_state[f'model_{i+1}'].plot_confusion(ax=ax[i], cmap=cmap)
