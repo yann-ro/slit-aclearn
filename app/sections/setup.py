@@ -50,6 +50,7 @@ def dataset_section():
                 uploaded_unlabeled = st.file_uploader('Choose a file for data unlabeled', type=['npy'])
         
         if  st.button('validate import dataset'):
+            
             if uploaded_data and uploaded_labels is not None:
                 st.session_state.dataset_data_path = os.path.join('data', uploaded_data.name)
                 save_file(uploaded_data)
@@ -142,6 +143,7 @@ def modify_section_models():
 
     with left:
         st.session_state.n_models = st.number_input('number of models', min_value=0, max_value=10, value=1, step=1, format='%i')
+        st.session_state['fixed_data_init'] = st.checkbox('fixed data init', value=True)
     with center:
         st.session_state['device'] = st.selectbox(f'Device', torch.cuda.is_available()*['cuda']+['cpu'])
 
@@ -179,7 +181,14 @@ def init_models():
             
                     if st.session_state[f'n_samp_mod_{i}']>1:
                         for j in range(st.session_state[f'n_samp_mod_{i}']):
-                            st.session_state[f'dataset_{i}.{j}'] = copy.deepcopy(st.session_state['dataset'])
+                            
+                            if st.session_state['fixed_data_init']:
+                                st.session_state[f'dataset_{i}.{j}'] = copy.deepcopy(st.session_state['dataset'])
+                            
+                            else:
+                                st.session_state[f'dataset_{i}.{j}'] = AcLearnDataset(st.session_state.dataset_data_path,
+                                                                                      st.session_state.dataset_labels_path, 
+                                                                                      size_init_per_class=2)
                             
                             st.session_state[f'model_{i}.{j}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
                                                                               st.session_state[f'dataset_{i}.{j}'],
