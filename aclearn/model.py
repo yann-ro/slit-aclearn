@@ -48,6 +48,7 @@ class AcLearnModel():
                                 verbose=0,
                                 device=device)
 
+
         self.acc_history = None
         self.max_accuracy = 0
         self.index_epoch = 0
@@ -89,6 +90,9 @@ class AcLearnModel():
         """
         
         if self.oracle=='computer':
+            print('n_queries: ', n_queries)
+            print('query_size: ', query_size)
+
             for i in range(n_queries):
                 self.index_epoch += 1
                 self.forward(query_size, train_acc)
@@ -98,7 +102,8 @@ class AcLearnModel():
                 else:
                     print(f'\t(query {self.index_epoch}) Test acc: \t{self.acc_history[ self.index_epoch]:0.4f}')
                 
-                progress_bar.progress(int((i+1)/n_queries*100))
+                if progress_bar:
+                    progress_bar.progress(int((i+1)/n_queries*100))
 
         elif self.oracle=='human':
             print('MODE not implemented yet')
@@ -110,6 +115,8 @@ class AcLearnModel():
         """
         """
         
+        print('X_pool size: ', self.dataset.X_pool.shape)
+
         query_idx, query_instance = self.learner.query(self.dataset.X_pool, query_size)
 
         self.X_query = self.dataset.X_pool[query_idx]

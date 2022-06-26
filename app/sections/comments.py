@@ -22,5 +22,5 @@ def display_explanation(kind):
         text = 'Prediction incertitude quantified using dropout as Bayesian estimator of weights. <https://arxiv.org/abs/1506.02142>'
 
 
-    with st.expander("See explanation"): 
+    with st.expander('details'): 
         st.markdown(text, unsafe_allow_html=True)

@@ -171,7 +171,7 @@ def init_models():
         
         if not st.session_state.setup_finished:
             
-            if st.session_state['task'] and st.session_state['dataset_data_path']:
+            if st.session_state['task'] and st.session_state['dataset']:
         
                 st.session_state.setup_finished = True
 
