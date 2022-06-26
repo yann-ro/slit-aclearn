@@ -54,16 +54,19 @@ def plot_accuracy():
 
 
 def plot_acc_variance(i):
+    
     n_samp = st.session_state[f'n_samp_mod_{i}']
     n_epochs = len(st.session_state[f'model_{i}.{0}'].acc_history)
 
     acc = np.array([st.session_state[f'model_{i}.{j}'].acc_history for j in range(n_samp)])
     df = pd.DataFrame(acc, columns=np.arange(n_epochs)).melt()
 
+    colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
+
     sns.lineplot(data=df, x='variable', y='value', estimator=np.mean, ci='sd', label=f"acc model {i} ({st.session_state[f'al_algo_{i}']}) [x{n_samp}]")
     sns.lineplot(data=df, x='variable', y='value', estimator=np.mean,  ci=50, color='orange')
-    sns.lineplot(data=df, x='variable', y='value', estimator=np.min, linestyle='--', ci=None, color='orange', alpha=0.5)
-    sns.lineplot(data=df, x='variable', y='value', estimator=np.max, linestyle='--', ci=None, color='orange', alpha=0.5)
+    sns.lineplot(data=df, x='variable', y='value', estimator=np.min, linestyle='--', ci=None, color=colors[i], alpha=0.5)
+    sns.lineplot(data=df, x='variable', y='value', estimator=np.max, linestyle='--', ci=None, color=colors[i], alpha=0.5)
 
 
 
@@ -92,8 +95,11 @@ def plot_confusion():
         c_1 = matplotlib.colors.colorConverter.to_rgba('black', alpha = 1)
         c_2= matplotlib.colors.colorConverter.to_rgba(colors[0], alpha = 1)
         cmap = matplotlib.colors.LinearSegmentedColormap.from_list('rb_cmap', [c_1, c_2], 512)
-
-        st.session_state[f'model_1'].plot_confusion(ax=ax, cmap=cmap)
+        
+        if st.session_state[f'n_samp_mod_{i+1}']>1:
+            st.session_state[f'model_1.0'].plot_confusion(ax=ax, cmap=cmap)
+        else:
+            st.session_state[f'model_1'].plot_confusion(ax=ax, cmap=cmap)
 
     st.pyplot(fig)
 
