@@ -7,6 +7,8 @@ import copy
 import app
 import os
 
+
+
 def setup_window():
     st.header('Dataset')
     dataset_section()
@@ -27,20 +29,7 @@ def setup_window():
     with center: val_setup = st.button('validate setup')
     
     if val_setup:
-        
         init_models()
-
-        if st.session_state['task'] and st.session_state['dataset_data_path'] and st.session_state['ml_algo_1']:
-            st.session_state.setup_finished = True
-            
-            for i in range(1, st.session_state.n_models+1):
-                st.session_state[f'model_{i}'].init_training()
-            st.success('setup finished')
-            
-            st.experimental_rerun()
-
-        else:
-            st.error('missing some elements')
 
 
 
@@ -98,9 +87,13 @@ def dataset_section():
                 st.markdown(f"<font color='gray'>{st.session_state.dataset_labels_path}", unsafe_allow_html=True)
                 st.markdown(f"<font color='gray'>{st.session_state.dataset_data_unlabeled_path}", unsafe_allow_html=True)
 
+
+
+
 def save_file(file):
     with open(os.path.join('data', file.name), 'wb') as f: 
             f.write(file.getbuffer())
+
 
 
 def task_section():
@@ -159,47 +152,49 @@ def modify_section_models():
         for i in range(1, st.session_state.n_models+1):
             with cols[0]: st.session_state[f'ml_algo_{i}'] = st.selectbox(f'ml algorithm ({i}) (only MC_dropout)', models_cl_names)
             with cols[1]: st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy ({i})', samp_names)
-            with cols[2]: st.session_state[f'n_samp_mod_{i}'] = st.slider(f'N samples for variance estimation ({i}) (not working)', 1, 100)
+            with cols[2]: st.session_state[f'n_samp_mod_{i}'] = st.number_input(f'N samples for variance estimation ({i}) (not working)', 
+                                                                                min_value=1, 
+                                                                                max_value=100)
             with cols[3]: st.session_state[f'pre_trained_model_{i}'] = st.selectbox(f'pre-trained model ({i}) (not working)', [None])
-            
-            # if not st.session_state.setup_finished:
-                
-            #     if st.session_state[f'n_samp_mod_{i}']>1:
-            #         for j in range(st.session_state[f'n_samp_mod_{i}']):
-            #             st.session_state[f'dataset_{i}.{j}'] = copy.deepcopy(st.session_state['dataset'])
-                        
-            #             st.session_state[f'model_{i}.{j}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
-            #                                     st.session_state[f'dataset_{i}'],
-            #                                     model_id = f"model_{i}.{j}_{st.session_state[f'al_algo_{i}']}",
-            #                                     device = st.session_state['device'])
-
-            #     else:
-            #         st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
-
-            #         st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
-            #                                                       st.session_state[f'dataset_{i}'],
-            #                                                       model_id = f"model_{i}_{st.session_state[f'al_algo_{i}']}",
-            #                                                       device = st.session_state['device'])
 
 
 def init_models():
-    if not st.session_state.setup_finished:
         
-        for i in range(1, st.session_state.n_models+1):
-    
-            if st.session_state[f'n_samp_mod_{i}']>1:
-                for j in range(st.session_state[f'n_samp_mod_{i}']):
-                    st.session_state[f'dataset_{i}.{j}'] = copy.deepcopy(st.session_state['dataset'])
-                    
-                    st.session_state[f'model_{i}.{j}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
+        if not st.session_state.setup_finished:
+            
+            if st.session_state['task'] and st.session_state['dataset_data_path']:
+        
+                st.session_state.setup_finished = True
+
+                for i in range(1, st.session_state.n_models+1):
+            
+                    if st.session_state[f'n_samp_mod_{i}']>1:
+                        for j in range(st.session_state[f'n_samp_mod_{i}']):
+                            st.session_state[f'dataset_{i}.{j}'] = copy.deepcopy(st.session_state['dataset'])
+                            
+                            st.session_state[f'model_{i}.{j}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
+                                                                            st.session_state[f'dataset_{i}'],
+                                                                            model_id = f"model_{i}.{j}_{st.session_state[f'al_algo_{i}']}",
+                                                                            device = st.session_state['device'])
+                            
+                            st.session_state[f'model_{i}.{j}'].init_training()
+                    else:
+                        st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
+
+                        st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
                                                                     st.session_state[f'dataset_{i}'],
-                                                                    model_id = f"model_{i}.{j}_{st.session_state[f'al_algo_{i}']}",
+                                                                    model_id = f"model_{i}_{st.session_state[f'al_algo_{i}']}",
                                                                     device = st.session_state['device'])
+                        
+                        st.session_state[f'model_{i}'].init_training()
 
+                st.success('setup finished')
+                st.experimental_rerun()
+    
             else:
-                st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
+                st.error('missing some elements')
+            
+        
+        
+        
 
-                st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
-                                                            st.session_state[f'dataset_{i}'],
-                                                            model_id = f"model_{i}_{st.session_state[f'al_algo_{i}']}",
-                                                            device = st.session_state['device'])
