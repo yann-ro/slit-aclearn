@@ -8,10 +8,10 @@ def uniform(learner, X, query_size=1):
 
 
 
-def max_entropy(learner, X, query_size=1, T=100):
+def max_entropy(learner, X, query_size=1, T=100, max_sample=2000):
     
-    if len(X)>200: 
-        random_subset = np.random.choice(range(len(X)), size=2000, replace=False)
+    if len(X)>max_sample: 
+        random_subset = np.random.choice(range(len(X)), size=max_sample, replace=False)
     else:
         random_subset = np.arange(len(X))
 
@@ -27,10 +27,10 @@ def max_entropy(learner, X, query_size=1, T=100):
 
 
 
-def bald(learner, X, query_size=1, T=100):
+def bald(learner, X, query_size=1, T=100, max_sample=2000):
     
-    if len(X)>200: 
-        random_subset = np.random.choice(range(len(X)), size=2000, replace=False)
+    if len(X)>max_sample: 
+        random_subset = np.random.choice(range(len(X)), size=max_sample, replace=False)
     else:
         random_subset = np.arange(len(X))
     
@@ -48,10 +48,10 @@ def bald(learner, X, query_size=1, T=100):
 
 
 
-def variation_ratio(learner, X, n_instances=1, T=100):
+def variation_ratio(learner, X, n_instances=1, T=100, max_sample=2000):
     
-    if len(X)>200: 
-        random_subset = np.random.choice(range(len(X)), size=2000, replace=False)
+    if len(X)>max_sample: 
+        random_subset = np.random.choice(range(len(X)), size=max_sample, replace=False)
     else:
         random_subset = np.arange(len(X))
 
