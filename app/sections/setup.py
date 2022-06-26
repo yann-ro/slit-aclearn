@@ -1,4 +1,4 @@
-from app.sections import display_explanation
+from .comments import display_explanation
 from aclearn.dataset import AcLearnDataset
 from aclearn.model import AcLearnModel
 import streamlit as st
