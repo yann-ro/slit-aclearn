@@ -160,9 +160,21 @@ def modify_section_models():
             with cols[3]: st.session_state[f'pre_trained_model_{i}'] = st.selectbox(f'pre-trained model ({i}) (not working)', [None])
             
             if not st.session_state.setup_finished:
-                st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
                 
-                st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
-                                                              st.session_state[f'dataset_{i}'],
-                                                              model_id = f"model_{i}_{st.session_state[f'al_algo_{i}']}",
-                                                              device = device)
+                
+                if st.session_state[f'n_samp_mod_{i}']>1:
+                    for j in range(st.session_state[f'n_samp_mod_{i}']):
+                        st.session_state[f'dataset_{i}.{j}'] = copy.deepcopy(st.session_state['dataset'])
+                        
+                        st.session_state[f'model_{i}.{j}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
+                                                st.session_state[f'dataset_{i}'],
+                                                model_id = f"model_{i}.{j}_{st.session_state[f'al_algo_{i}']}",
+                                                device = device)
+                                                
+                else:
+                    st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
+
+                    st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
+                                                                  st.session_state[f'dataset_{i}'],
+                                                                  model_id = f"model_{i}_{st.session_state[f'al_algo_{i}']}",
+                                                                  device = device)
