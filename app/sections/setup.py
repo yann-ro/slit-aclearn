@@ -147,11 +147,11 @@ def modify_section_models():
 
     if st.session_state.n_models > 0:
         models_cl_names = ['MC_dropout', 'SVC', 'Deep Bayesian Convolutionnal']
-        samp_names = ['Uniform', 'Max_entropy', 'Bald', 'Var_ratio']
+        samp_names = ['Random', 'Max_entropy', 'Bald', 'Var_ratio']
 
         for i in range(1, st.session_state.n_models+1):
             with cols[0]: st.session_state[f'ml_algo_{i}'] = st.selectbox(f'ml algorithm ({i}) (only MC_dropout)', models_cl_names)
-            with cols[1]: st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy ({i})', samp_names)
+            with cols[1]: st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy ({i})', samp_names).lower()
             with cols[2]: st.session_state[f'n_samp_mod_{i}'] = st.number_input(f'N samples for variance estimation ({i})', 
                                                                                 min_value=1, 
                                                                                 max_value=100)

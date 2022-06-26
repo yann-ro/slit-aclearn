@@ -29,10 +29,10 @@ class AcLearnModel():
         self.model_id = model_id
 
         print(f'$({self.model_id}) init AcLearn model')
-        if query_strategy == 'Uniform': self.query_strategy = uniform
-        elif query_strategy == 'Max_entropy': self.query_strategy = max_entropy
-        elif query_strategy == 'Bald': self.query_strategy = bald
-        elif query_strategy == 'Var_ratio': self.query_strategy = variation_ratio
+        if query_strategy == 'random': self.query_strategy = uniform
+        elif query_strategy == 'max_entropy': self.query_strategy = max_entropy
+        elif query_strategy == 'bald': self.query_strategy = bald
+        elif query_strategy == 'var_ratio': self.query_strategy = variation_ratio
         else : print('Not existing query_strategy')
 
         self.oracle = oracle
