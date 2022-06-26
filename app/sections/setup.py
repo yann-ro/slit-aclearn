@@ -173,18 +173,18 @@ def init_models():
                             st.session_state[f'dataset_{i}.{j}'] = copy.deepcopy(st.session_state['dataset'])
                             
                             st.session_state[f'model_{i}.{j}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
-                                                                            st.session_state[f'dataset_{i}'],
-                                                                            model_id = f"model_{i}.{j}_{st.session_state[f'al_algo_{i}']}",
-                                                                            device = st.session_state['device'])
+                                                                              st.session_state[f'dataset_{i}.{j}'],
+                                                                              model_id = f"model_{i}.{j}_{st.session_state[f'al_algo_{i}']}",
+                                                                              device = st.session_state['device'])
                             
                             st.session_state[f'model_{i}.{j}'].init_training()
                     else:
                         st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
 
                         st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
-                                                                    st.session_state[f'dataset_{i}'],
-                                                                    model_id = f"model_{i}_{st.session_state[f'al_algo_{i}']}",
-                                                                    device = st.session_state['device'])
+                                                                      st.session_state[f'dataset_{i}'],
+                                                                      model_id = f"model_{i}_{st.session_state[f'al_algo_{i}']}",
+                                                                      device = st.session_state['device'])
                         
                         st.session_state[f'model_{i}'].init_training()
 
