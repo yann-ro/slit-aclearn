@@ -1,6 +1,7 @@
 from .plot import *
 from .setup import *
 from .train import *
+from .comments import *
 import streamlit as st
 
 def nav_bar():

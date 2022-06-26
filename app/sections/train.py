@@ -1,4 +1,3 @@
-from pickle import FALSE, TRUE
 from streamlit_drawable_canvas import st_canvas
 import matplotlib.pyplot as plt
 import streamlit as st
