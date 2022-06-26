@@ -36,6 +36,10 @@ def plot_accuracy():
     """
     
     fig, ax = plt.subplots()
+
+    ax.axhline(y=st.session_state['model_0'].max_accuracy,
+               linestyle='--', c='r', label='max accuracy full dataset', alpha=0.5)
+
     for i in range(1, st.session_state.n_models+1):
         if st.session_state[f'n_samp_mod_{i}']>1:
             plot_acc_variance(i)

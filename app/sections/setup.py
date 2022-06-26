@@ -166,6 +166,15 @@ def init_models():
         
                 st.session_state.setup_finished = True
 
+                st.session_state['model_0'] = AcLearnModel('random',
+                                                            copy.deepcopy(st.session_state['dataset']),
+                                                            model_id = 'model_0',
+                                                            device = st.session_state['device'])
+
+                print('$(model_0) evaluate max accuracy...')
+                st.session_state['model_0'].evaluate_max()
+                print('$(model_0) max accuracy calculated')
+
                 for i in range(1, st.session_state.n_models+1):
             
                     if st.session_state[f'n_samp_mod_{i}']>1:
