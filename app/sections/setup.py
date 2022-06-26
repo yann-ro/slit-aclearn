@@ -138,10 +138,10 @@ def modify_section_models():
 
     with left:
         st.session_state.n_models = st.number_input('number of models', min_value=0, max_value=10, value=1, step=1, format='%i')
+        st.markdown('')
+        st.session_state['fixed_data_init'] = st.checkbox('fixed data init', value=True)
     with center:
         st.session_state['device'] = st.selectbox(f'Device', torch.cuda.is_available()*['cuda']+['cpu'])
-    with right:
-        st.session_state['fixed_data_init'] = st.checkbox('fixed data init', value=True)
 
     if st.session_state.n_models > 0:
         models_cl_names = ['MC_dropout']
@@ -149,8 +149,8 @@ def modify_section_models():
 
         for i in range(1, st.session_state.n_models+1):
             cols = st.columns([1,1,1,1])
-            
-            with cols[0]: st.markdown(f"**Model {i}**)", unsafe_allow_html=True)
+
+            with cols[0]: st.markdown(f'**Model {i}**')
             with cols[1]: st.session_state[f'ml_algo_{i}'] = st.selectbox(f'ml algorithm ({i}) (only MC_dropout)', models_cl_names)
             with cols[2]: st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy ({i})', samp_names).lower()
             with cols[3]: st.session_state[f'n_samp_mod_{i}'] = st.number_input(f'N samples for variance estimation ({i})', 
