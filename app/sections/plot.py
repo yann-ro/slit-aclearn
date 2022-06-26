@@ -51,10 +51,11 @@ def plot_accuracy():
 
 def plot_acc_variance(i):
     n_samp = st.session_state[f'n_samp_mod_{i}']
+    n_epochs = len(st.session_state[f'model_{i}.{0}'].acc_history)
 
     acc = np.array([st.session_state[f'model_{i}.{j}'].acc_history for j in range(n_samp)])
     print(acc.shape)
-    df = pd.DataFrame(acc, columns=np.arange(n_samp)).melt()
+    df = pd.DataFrame(acc, columns=np.arange(n_epochs)).melt()
     print(df)
 
     sns.lineplot(data=df, x='variable', y='value',estimator=np.mean,ci='sd',color='orange',label=f'random ({n_samp})')
