@@ -14,12 +14,10 @@ def setup_window():
     dataset_section()
     st.markdown('---')
 
-
     st.header('Task')
     task_section()
     st.markdown('---')
 
-    
     st.header('Active Learning Models')
     models_section()
 
@@ -138,10 +136,10 @@ def modify_section_models():
 
     with left:
         st.session_state.n_models = st.number_input('number of models', min_value=0, max_value=10, value=1, step=1, format='%i')
-        st.markdown(' ')
-        st.session_state['fixed_data_init'] = st.checkbox('fixed data init', value=True)
     with center:
         st.session_state['device'] = st.selectbox(f'Device', torch.cuda.is_available()*['cuda']+['cpu'])
+    with right:
+        st.session_state['fixed_data_init'] = (st.selectbox('Fixed data init', ['True', 'False'])=='True')
 
     if st.session_state.n_models > 0:
         models_cl_names = ['MC_dropout']
