@@ -90,8 +90,6 @@ class AcLearnModel():
         """
         
         if self.oracle=='computer':
-            print('n_queries: ', n_queries)
-            print('query_size: ', query_size)
 
             for i in range(n_queries):
                 self.index_epoch += 1
@@ -114,9 +112,6 @@ class AcLearnModel():
     def forward(self, query_size, train_acc):
         """
         """
-        
-        print('fwd query size', query_size)
-        print('X_pool size: ', self.dataset.X_pool.shape)
 
         query_idx, query_instance = self.learner.query(self.dataset.X_pool, query_size)
 
