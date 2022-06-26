@@ -1,6 +1,7 @@
 import streamlit as st
 
 def display_explanation(kind):
+    kind = kind.lower()
     text = '...'
 
     #sampling
