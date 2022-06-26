@@ -25,9 +25,9 @@ def train_window():
         progress_bar = st.progress(0)
         for i in range(1, st.session_state.n_models+1):
             if st.session_state[f'n_samp_mod_{i}']>1:
-                for j in range(st.session_state[f'n_samp_mod_{i}']):
+                for j in range(st.session_state[f'n_samp_mod_{i}']+1):
                     state.markdown(f"<center>model {i}/{st.session_state.n_models} [{j+1}/{st.session_state[f'n_samp_mod_{i}']}]</center>", unsafe_allow_html=True)
-                training(f'model_{i}.{j}', msg, progress_bar, tsne=False, pca=False)
+                    training(f'model_{i}.{j}', msg, progress_bar, tsne=False, pca=False)
             
             else:
                 state.markdown(f'<center>model {i}/{st.session_state.n_models}</center>', unsafe_allow_html=True)

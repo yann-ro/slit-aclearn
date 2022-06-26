@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import streamlit as st
+import seaborn as sns
+import pandas as pd
 import numpy as np
 import matplotlib
 
@@ -35,12 +37,31 @@ def plot_accuracy():
     
     fig, ax = plt.subplots()
     for i in range(1, st.session_state.n_models+1):
-        ax.plot(st.session_state[f'model_{i}'].acc_history, label=f"acc model {i} ({st.session_state[f'al_algo_{i}']})")
+        if st.session_state[f'n_samp_mod_{i}']>1:
+            plot_acc_variance(i)
+        else:
+            ax.plot(st.session_state[f'model_{i}'].acc_history, label=f"acc model {i} ({st.session_state[f'al_algo_{i}']})")
     
     plt.title('Accuracy on test set')
     plt.grid(alpha=0.3, linestyle='--')
     plt.legend()
     st.write(fig)
+
+
+
+def plot_acc_variance(i):
+    n_samp = st.session_state[f'n_samp_mod_{i}']
+
+    acc = np.array([st.session_state[f'model_{i}.{j}'].acc_history for j in range(n_samp)])
+    print(acc.shape)
+    df = pd.DataFrame(acc, columns=np.arange(n_samp)).melt()
+    print(df)
+
+    sns.lineplot(data=df, x='variable', y='value',estimator=np.mean,ci='sd',color='orange',label=f'random ({n_samp})')
+    sns.lineplot(data=df, x='variable', y='value',estimator=np.mean,color='orange')
+    sns.lineplot(data=df, x='variable', y='value',estimator=np.min,linestyle='--',ci=None,color='orange',alpha=0.5)
+    sns.lineplot(data=df, x='variable', y='value',estimator=np.max,linestyle='--',ci=None,color='orange',alpha=0.5)
+
 
 
 
