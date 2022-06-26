@@ -15,14 +15,14 @@ def plot_windows():
     
     with left:
         plot_accuracy()
-    
-        if st.session_state.n_models>0:
-            plot_confusion()
+        plot_confusion()
     
     with right:
-        selected_model = st.selectbox('Select model',[f'model_{i+1}' for i in range(st.session_state.n_models)])
-        st.write(st.session_state[selected_model].emb_fig)     
-
+        
+        models = [f'model_{i+1}' if st.session_state[f'n_samp_mod_{i}']==1 else f'model_{i+1}.0' for i in range(st.session_state.n_models)]
+        model_name = st.selectbox('Select model', models)
+        
+        plot_2D_feature_space(model_name)
 
 
     cols3 = st.columns([6,1,6])
@@ -54,9 +54,7 @@ def plot_acc_variance(i):
     n_epochs = len(st.session_state[f'model_{i}.{0}'].acc_history)
 
     acc = np.array([st.session_state[f'model_{i}.{j}'].acc_history for j in range(n_samp)])
-    print(acc.shape)
     df = pd.DataFrame(acc, columns=np.arange(n_epochs)).melt()
-    print(df)
 
     sns.lineplot(data=df, x='variable', y='value', estimator=np.mean, ci='sd', label=f"acc model {i} ({st.session_state[f'al_algo_{i}']}) [x{n_samp}]")
     #sns.lineplot(data=df, x='variable', y='value', estimator=np.mean, color='orange')
@@ -65,11 +63,10 @@ def plot_acc_variance(i):
 
 
 
-
 def plot_confusion():
     """
     """    
-    n = nrows=st.session_state.n_models
+    n = st.session_state.n_models
     colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
     fig, ax = plt.subplots(nrows=1, ncols=n, figsize=(5*n, 4))
     
@@ -80,8 +77,11 @@ def plot_confusion():
             c_1 = matplotlib.colors.colorConverter.to_rgba('black', alpha = 1)
             c_2 = matplotlib.colors.colorConverter.to_rgba(colors[i], alpha = 1)
             cmap = matplotlib.colors.LinearSegmentedColormap.from_list('rb_cmap', [c_1, c_2], 512)
-
-            st.session_state[f'model_{i+1}'].plot_confusion(ax=ax[i], cmap=cmap)
+            
+            if st.session_state[f'n_samp_mod_{i}']>1:
+                st.session_state[f'model_{i+1}.0'].plot_confusion(ax=ax[i], cmap=cmap)
+            else:
+                st.session_state[f'model_{i+1}'].plot_confusion(ax=ax[i], cmap=cmap)
     else:
         ax.set_title('Confusion matrix on test set')
 
@@ -92,3 +92,11 @@ def plot_confusion():
         st.session_state[f'model_1'].plot_confusion(ax=ax, cmap=cmap)
 
     st.pyplot(fig)
+
+
+
+def plot_2D_feature_space(model_name):
+    """
+    """
+
+    st.write(st.session_state[model_name].emb_fig)
