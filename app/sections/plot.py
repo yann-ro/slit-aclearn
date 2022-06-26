@@ -65,8 +65,8 @@ def plot_acc_variance(i):
 
     sns.lineplot(data=df, x='variable', y='value', estimator=np.mean, ci='sd', label=f"acc model {i} ({st.session_state[f'al_algo_{i}']}) [x{n_samp}]")
     sns.lineplot(data=df, x='variable', y='value', estimator=np.mean,  ci=50, color='orange')
-    sns.lineplot(data=df, x='variable', y='value', estimator=np.min, linestyle='--', ci=None, color=colors[i], alpha=0.5)
-    sns.lineplot(data=df, x='variable', y='value', estimator=np.max, linestyle='--', ci=None, color=colors[i], alpha=0.5)
+    sns.lineplot(data=df, x='variable', y='value', estimator=np.min, linestyle='--', ci=None, color=colors[i-1], alpha=0.5)
+    sns.lineplot(data=df, x='variable', y='value', estimator=np.max, linestyle='--', ci=None, color=colors[i-1], alpha=0.5)
 
 
 
@@ -96,7 +96,7 @@ def plot_confusion():
         c_2= matplotlib.colors.colorConverter.to_rgba(colors[0], alpha = 1)
         cmap = matplotlib.colors.LinearSegmentedColormap.from_list('rb_cmap', [c_1, c_2], 512)
         
-        if st.session_state[f'n_samp_mod_{i+1}']>1:
+        if st.session_state[f'n_samp_mod_1']>1:
             st.session_state[f'model_1.0'].plot_confusion(ax=ax, cmap=cmap)
         else:
             st.session_state[f'model_1'].plot_confusion(ax=ax, cmap=cmap)
