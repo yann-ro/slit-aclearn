@@ -10,9 +10,10 @@ def uniform(learner, X, query_size=1):
 
 def max_entropy(learner, X, query_size=1, T=100):
     
-    print('lenX', len(X))
-    random_subset = np.random.choice(range(len(X)), size=2000, replace=False)
-    
+    if len(X)>200: size=2000
+    else: size=len(X)
+
+    random_subset = np.random.choice(range(len(X)), size=size, replace=False)
 
     with torch.no_grad():
         outputs = np.stack([torch.softmax(learner.estimator.forward(X[random_subset], training=True),dim=-1).cpu().numpy()
@@ -27,7 +28,10 @@ def max_entropy(learner, X, query_size=1, T=100):
 
 def bald(learner, X, query_size=1, T=100):
     
-    random_subset = np.random.choice(range(len(X)), size=2000, replace=False)
+    if len(X)>200: size=2000
+    else: size=len(X)
+
+    random_subset = np.random.choice(range(len(X)), size=size, replace=False)
     
     with torch.no_grad():
         outputs = np.stack([torch.softmax(learner.estimator.forward(X[random_subset], training=True),dim=-1).cpu().numpy()
@@ -44,7 +48,10 @@ def bald(learner, X, query_size=1, T=100):
 
 def variation_ratio(learner, X, n_instances=1, T=100):
     
-    random_subset= np.random.choice(range(len(X)), size=2000, replace=False)
+    if len(X)>200: size=2000
+    else: size=len(X)
+
+    random_subset= np.random.choice(range(len(X)), size=size, replace=False)
     
     with torch.no_grad():
         outputs = np.stack([torch.softmax(learner.estimator.forward(X[random_subset], training=True), dim=-1).cpu().numpy()
