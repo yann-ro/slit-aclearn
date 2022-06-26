@@ -22,7 +22,6 @@ def setup_window():
     
     st.header('Active Learning Models')
     models_section()
-    st.markdown('---')
 
 
     _,center,_ = st.columns([5,1,5])
@@ -155,8 +154,8 @@ def modify_section_models():
             with cols[2]: st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy ({i})', samp_names).lower()
             with cols[3]: st.session_state[f'n_samp_mod_{i}'] = st.number_input(f'N samples for variance estimation ({i})', 
                                                                                 min_value=1, 
-                                                                                max_value=100)
-
+                                                                                max_value=100)                
+            st.markdown('---')
 
 
 def init_models():
