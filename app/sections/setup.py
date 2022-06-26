@@ -197,7 +197,12 @@ def init_models():
                             
                             st.session_state[f'model_{i}.{j}'].init_training()
                     else:
-                        st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
+                        if st.session_state['fixed_data_init']:
+                            st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
+                        else:
+                            st.session_state[f'dataset_{i}'] = AcLearnDataset(st.session_state.dataset_data_path,
+                                                                                    st.session_state.dataset_labels_path, 
+                                                                                    size_init_per_class=2)
 
                         st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
                                                                       st.session_state[f'dataset_{i}'],
