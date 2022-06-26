@@ -130,8 +130,8 @@ def models_section():
                 st.markdown(f"**sampling strategy**<br/><font color='gray'>{st.session_state[f'al_algo_{i}']}", unsafe_allow_html=True)
                 with st.expander("See explanation"): st.write("...")
             
-            with cols[3]: 
-                st.markdown(f"**pre-trained model **<br/><font color='gray'>{st.session_state[f'pre_trained_model_{i}']}", unsafe_allow_html=True)
+            #with cols[3]: 
+            #    st.markdown(f"**pre-trained model **<br/><font color='gray'>{st.session_state[f'pre_trained_model_{i}']}", unsafe_allow_html=True)
 
 
 
