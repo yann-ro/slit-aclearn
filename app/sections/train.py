@@ -20,31 +20,45 @@ def train_window():
     
     if retrain:
         state = st.empty()
+        msg = st.empty()
         progress_bar = st.progress(0)
         for i in range(1, st.session_state.n_models+1):
-            state.markdown(f'<center>model {i}/{st.session_state.n_models}</center>', unsafe_allow_html=True)
+            if st.session_state[f'n_samp_mod_{i}']>1:
+                for j in range(st.session_state[f'n_samp_mod_{i}']):
+                    state.markdown(f"<center>model {i}/{st.session_state.n_models} [{j+1}/{st.session_state[f'n_samp_mod_{i}']}]</center>", unsafe_allow_html=True)
+                train(f'model_{i}.{j}', msg, progress_bar)
             
-            print(f"$({st.session_state[f'model_{i}'].model_id}) train started")
-            st.session_state[f'model_{i}'].active_learning_procedure(n_queries=st.session_state['n_epochs'], 
-                                                                     query_size=st.session_state['query_size'], 
-                                                                     train_acc=True,
-                                                                     progress_bar=progress_bar)
-            print(f"$({st.session_state[f'model_{i}'].model_id}) train finished")
-            
-            state.markdown(f'<center>compute t-SNE ({i}) ...</center>', unsafe_allow_html=True)
-            st.session_state[f'model_{i}'].compute_tsne()
-            print(f"$({st.session_state[f'model_{i}'].model_id}) tsne computed")
-            
-            state.markdown(f'<center>compute PCA ({i}) ...</center>', unsafe_allow_html=True)
-            st.session_state[f'model_{i}'].compute_pca()
-            print(f"$({st.session_state[f'model_{i}'].model_id}) pca computed")
-
-            state.markdown(f'<center>compute figure {i} ...</center>', unsafe_allow_html=True)
-            st.session_state[f'model_{i}'].compute_emb_figure()
-            print(f"$({st.session_state[f'model_{i}'].model_id}) embedding figure computed")
+            else:
+                state.markdown(f'<center>model {i}/{st.session_state.n_models}</center>', unsafe_allow_html=True)
+                train(f'model_{i}', msg, progress_bar)
 
         st.success('Model sucessfully retrained')
         
+
+
+def train(model_name, msg, progress_bar):
+
+    print(f"$({st.session_state[model_name].model_id}) train started")
+    msg.markdown('train ...')
+    st.session_state[model_name].active_learning_procedure(n_queries=st.session_state['n_epochs'], 
+                                                            query_size=st.session_state['query_size'], 
+                                                            train_acc=True,
+                                                            progress_bar=progress_bar)
+
+    print(f"$({st.session_state[model_name].model_id}) train finished")
+    
+    msg.markdown(f'<center>compute t-SNE ...</center>', unsafe_allow_html=True)
+    st.session_state[model_name].compute_tsne()
+    print(f"$({st.session_state[model_name].model_id}) tsne computed")
+    
+    msg.markdown(f'<center>compute PCA ...</center>', unsafe_allow_html=True)
+    st.session_state[model_name].compute_pca()
+    print(f"$({st.session_state[model_name].model_id}) pca computed")
+
+    msg.markdown(f'<center>compute figure ...</center>', unsafe_allow_html=True)
+    st.session_state[model_name].compute_emb_figure()
+    print(f"$({st.session_state[model_name].model_id}) embedding figure computed")
+
 
 
 def training_parameters_section():

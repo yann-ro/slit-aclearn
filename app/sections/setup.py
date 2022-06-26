@@ -152,10 +152,10 @@ def modify_section_models():
         for i in range(1, st.session_state.n_models+1):
             with cols[0]: st.session_state[f'ml_algo_{i}'] = st.selectbox(f'ml algorithm ({i}) (only MC_dropout)', models_cl_names)
             with cols[1]: st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy ({i})', samp_names)
-            with cols[2]: st.session_state[f'n_samp_mod_{i}'] = st.number_input(f'N samples for variance estimation ({i}) (not working)', 
+            with cols[2]: st.session_state[f'n_samp_mod_{i}'] = st.number_input(f'N samples for variance estimation ({i})', 
                                                                                 min_value=1, 
                                                                                 max_value=100)
-            with cols[3]: st.session_state[f'pre_trained_model_{i}'] = st.selectbox(f'pre-trained model ({i}) (not working)', [None])
+            #with cols[3]: st.session_state[f'pre_trained_model_{i}'] = st.selectbox(f'pre-trained model ({i})', [None])
 
 
 def init_models():
