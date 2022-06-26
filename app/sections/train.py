@@ -21,14 +21,20 @@ def train_window():
     if retrain:
         state = st.empty()
         msg = st.empty()
-        progress_bar = (st.progress(0.), 0., 1.)
+        progress_bar = [st.progress(0.), 0., 1.]
+
         for i in range(1, st.session_state.n_models+1):
             if st.session_state[f'n_samp_mod_{i}']>1:
                 for j in range(st.session_state[f'n_samp_mod_{i}']):
+                    progress_bar[1] = (i-1)/st.session_state.n_models*j/st.session_state[f'n_samp_mod_{i}']
+                    progress_bar[2] = i/st.session_state.n_models*j/st.session_state[f'n_samp_mod_{i}']
+
                     state.markdown(f"<center>model {i}/{st.session_state.n_models}<br>sample [{j+1}/{st.session_state[f'n_samp_mod_{i}']}]</center>", unsafe_allow_html=True)
                     training(f'model_{i}.{j}', msg, progress_bar, tsne=False, pca=True)
             
             else:
+                progress_bar[1] = (i-1)/st.session_state.n_models
+                progress_bar[2] = i/st.session_state.n_models
                 state.markdown(f'<center>model {i}/{st.session_state.n_models}</center>', unsafe_allow_html=True)
                 training(f'model_{i}', msg, progress_bar, tsne=False, pca=True)
 
