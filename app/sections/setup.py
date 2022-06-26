@@ -120,7 +120,7 @@ def models_section():
             cols = st.columns([1,1,1,1])
             with cols[0]: st.markdown(f"**Model {i}** <font color='gray'>(x{st.session_state[f'n_samp_mod_{i}']})", unsafe_allow_html=True)
             with cols[1]: 
-                st.markdown(f"**ml algorithm (only MC_dropout)**<br/><font color='gray'>{st.session_state[f'ml_algo_{i}']}", unsafe_allow_html=True)
+                st.markdown(f"**ml algorithm**<br/><font color='gray'>{st.session_state[f'ml_algo_{i}']}", unsafe_allow_html=True)
                 with st.expander("See explanation"): st.write("...")
             
             with cols[2]: 
@@ -148,10 +148,18 @@ def modify_section_models():
         for i in range(1, st.session_state.n_models+1):
             cols = st.columns([1,1,1,1])
 
-            with cols[0]: st.markdown(f'**Model {i}**')
-            with cols[1]: st.session_state[f'ml_algo_{i}'] = st.selectbox(f'ml algorithm ({i}) (only MC_dropout)', models_cl_names)
-            with cols[2]: st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy ({i})', samp_names).lower()
-            with cols[3]: st.session_state[f'n_samp_mod_{i}'] = st.number_input(f'N samples for variance estimation ({i})', 
+            with cols[0]: 
+                st.markdown(f'**Model {i}**')
+            with cols[1]: 
+                st.session_state[f'ml_algo_{i}'] = st.selectbox(f'ml algorithm ({i})', models_cl_names)
+                display_explanation('algo_'+st.session_state[f'ml_algo_{i}'])
+            
+            with cols[2]: 
+                st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy ({i})', samp_names).lower()
+                display_explanation('sampling_'+st.session_state[f'al_algo_{i}'])
+
+            with cols[3]:
+                st.session_state[f'n_samp_mod_{i}'] = st.number_input(f'N samples for variance estimation ({i})', 
                                                                                 min_value=1, 
                                                                                 max_value=100)                
             st.markdown('---')
@@ -216,5 +224,12 @@ def init_models():
             
         
         
-        
 
+def display_explanation(kind):
+    text = '...'
+
+    if kind=='sampling_random':
+        text = 'Sampling randomly/uniform correspond to select randomly new samples. It correspond to baseline sampling strategy in active learning.'
+    
+    with st.expander("See explanation"): 
+        st.write(text)
