@@ -25,9 +25,12 @@ def train_window():
 
         for i in range(1, st.session_state.n_models+1):
             if st.session_state[f'n_samp_mod_{i}']>1:
+                min = (i-1)/st.session_state.n_models
+                max = i/st.session_state.n_models
+
                 for j in range(st.session_state[f'n_samp_mod_{i}']):
-                    progress_bar[1] = (i-1)/st.session_state.n_models*j/st.session_state[f'n_samp_mod_{i}']
-                    progress_bar[2] = i/st.session_state.n_models*j/st.session_state[f'n_samp_mod_{i}']
+                    progress_bar[1] = min+(j/st.session_state[f'n_samp_mod_{i}'])*(max-min)
+                    progress_bar[2] = min+(j+1)/st.session_state[f'n_samp_mod_{i}']*(max-min)
 
                     state.markdown(f"<center>model {i}/{st.session_state.n_models}<br>sample [{j+1}/{st.session_state[f'n_samp_mod_{i}']}]</center>", unsafe_allow_html=True)
                     training(f'model_{i}.{j}', msg, progress_bar, tsne=False, pca=True)
@@ -63,7 +66,7 @@ def training(model_name, msg, progress_bar, tsne=True, pca=True):
         st.session_state[model_name].compute_pca()
         print(f"$({st.session_state[model_name].model_id}) pca computed")
 
-    msg.markdown(f'<center>compute figure ...</center>', unsafe_allow_html=True)
+    msg.markdown(f"<center><font color='gray'>compute figure ...</center>", unsafe_allow_html=True)
     st.session_state[model_name].compute_emb_figure()
     print(f"$({st.session_state[model_name].model_id}) embedding figure computed")
 
