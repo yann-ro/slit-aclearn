@@ -135,7 +135,6 @@ def modify_section_models():
 
     left, center, right, _ = st.columns([1,1,1,1])
     st.markdown('---')
-    cols = st.columns([1,1,1,1])
 
     with left:
         st.session_state.n_models = st.number_input('number of models', min_value=0, max_value=10, value=1, step=1, format='%i')
@@ -149,6 +148,8 @@ def modify_section_models():
         samp_names = ['Random', 'Max_entropy', 'Bald', 'Var_ratio']
 
         for i in range(1, st.session_state.n_models+1):
+            cols = st.columns([1,1,1,1])
+            
             with cols[0]: st.markdown(f"**Model {i}**)", unsafe_allow_html=True)
             with cols[1]: st.session_state[f'ml_algo_{i}'] = st.selectbox(f'ml algorithm ({i}) (only MC_dropout)', models_cl_names)
             with cols[2]: st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy ({i})', samp_names).lower()
