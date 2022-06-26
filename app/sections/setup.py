@@ -25,8 +25,11 @@ def setup_window():
 
     _,center,_ = st.columns([5,1,5])
     with center: val_setup = st.button('validate setup')
+    
     if val_setup:
         
+        init_models()
+
         if st.session_state['task'] and st.session_state['dataset_data_path'] and st.session_state['ml_algo_1']:
             st.session_state.setup_finished = True
             
@@ -147,7 +150,7 @@ def modify_section_models():
     with left:
         st.session_state.n_models = st.number_input('number of models', min_value=0, max_value=10, value=1, step=1, format='%i')
     with center:
-        device = st.selectbox(f'Device', torch.cuda.is_available()*['cuda']+['cpu'])
+        st.session_state['device'] = st.selectbox(f'Device', torch.cuda.is_available()*['cuda']+['cpu'])
 
     if st.session_state.n_models > 0:
         models_cl_names = ['MC_dropout', 'SVC', 'Deep Bayesian Convolutionnal']
@@ -159,22 +162,44 @@ def modify_section_models():
             with cols[2]: st.session_state[f'n_samp_mod_{i}'] = st.slider(f'N samples for variance estimation ({i}) (not working)', 1, 100)
             with cols[3]: st.session_state[f'pre_trained_model_{i}'] = st.selectbox(f'pre-trained model ({i}) (not working)', [None])
             
-            if not st.session_state.setup_finished:
+            # if not st.session_state.setup_finished:
                 
-                
-                if st.session_state[f'n_samp_mod_{i}']>1:
-                    for j in range(st.session_state[f'n_samp_mod_{i}']):
-                        st.session_state[f'dataset_{i}.{j}'] = copy.deepcopy(st.session_state['dataset'])
+            #     if st.session_state[f'n_samp_mod_{i}']>1:
+            #         for j in range(st.session_state[f'n_samp_mod_{i}']):
+            #             st.session_state[f'dataset_{i}.{j}'] = copy.deepcopy(st.session_state['dataset'])
                         
-                        st.session_state[f'model_{i}.{j}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
-                                                st.session_state[f'dataset_{i}'],
-                                                model_id = f"model_{i}.{j}_{st.session_state[f'al_algo_{i}']}",
-                                                device = device)
-                                                
-                else:
-                    st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
+            #             st.session_state[f'model_{i}.{j}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
+            #                                     st.session_state[f'dataset_{i}'],
+            #                                     model_id = f"model_{i}.{j}_{st.session_state[f'al_algo_{i}']}",
+            #                                     device = st.session_state['device'])
 
-                    st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
-                                                                  st.session_state[f'dataset_{i}'],
-                                                                  model_id = f"model_{i}_{st.session_state[f'al_algo_{i}']}",
-                                                                  device = device)
+            #     else:
+            #         st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
+
+            #         st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
+            #                                                       st.session_state[f'dataset_{i}'],
+            #                                                       model_id = f"model_{i}_{st.session_state[f'al_algo_{i}']}",
+            #                                                       device = st.session_state['device'])
+
+
+def init_models():
+    if not st.session_state.setup_finished:
+        
+        for i in range(1, st.session_state.n_models+1):
+    
+            if st.session_state[f'n_samp_mod_{i}']>1:
+                for j in range(st.session_state[f'n_samp_mod_{i}']):
+                    st.session_state[f'dataset_{i}.{j}'] = copy.deepcopy(st.session_state['dataset'])
+                    
+                    st.session_state[f'model_{i}.{j}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
+                                                                    st.session_state[f'dataset_{i}'],
+                                                                    model_id = f"model_{i}.{j}_{st.session_state[f'al_algo_{i}']}",
+                                                                    device = st.session_state['device'])
+
+            else:
+                st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
+
+                st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
+                                                            st.session_state[f'dataset_{i}'],
+                                                            model_id = f"model_{i}_{st.session_state[f'al_algo_{i}']}",
+                                                            device = st.session_state['device'])
