@@ -168,58 +168,75 @@ def modify_section_models():
 
 
 def init_models():
+    msg = st.empty()
+    progress_bar = st.progress(0.)
         
-        if not st.session_state.setup_finished:
-            
-            if st.session_state['task'] and st.session_state['dataset']:
+    if not st.session_state.setup_finished:
         
-                st.session_state.setup_finished = True
+        if st.session_state['task'] and st.session_state['dataset']:
+    
+            st.session_state.setup_finished = True
 
-                st.session_state['model_0'] = AcLearnModel('random',
-                                                            copy.deepcopy(st.session_state['dataset']),
-                                                            model_id = 'model_0',
-                                                            device = st.session_state['device'])
+            st.session_state['model_0'] = AcLearnModel('random',
+                                                        copy.deepcopy(st.session_state['dataset']),
+                                                        model_id = 'model_0',
+                                                        device = st.session_state['device'])
 
-                print('$(model_0) evaluate max accuracy...')
-                st.session_state['model_0'].evaluate_max()
-                print('$(model_0) max accuracy calculated')
+            print('$(model_0) evaluate max accuracy...')
+            msg.markdown("<font color='gray'>evaluate max accuracy", unsafe_allow_html=True)
+            st.session_state['model_0'].evaluate_max()
+            progress_bar.progress(0.5)
+            print('$(model_0) max accuracy calculated')
 
-                for i in range(1, st.session_state.n_models+1):
-            
-                    if st.session_state[f'n_samp_mod_{i}']>1:
-                        for j in range(st.session_state[f'n_samp_mod_{i}']):
-                            
-                            if st.session_state['fixed_data_init']:
-                                st.session_state[f'dataset_{i}.{j}'] = copy.deepcopy(st.session_state['dataset'])
-                            
-                            else:
-                                st.session_state[f'dataset_{i}.{j}'] = AcLearnDataset(st.session_state.dataset_data_path,
-                                                                                      st.session_state.dataset_labels_path, 
-                                                                                      size_init_per_class=2)
-                            
-                            st.session_state[f'model_{i}.{j}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
-                                                                              st.session_state[f'dataset_{i}.{j}'],
-                                                                              model_id = f"model_{i}.{j}_{st.session_state[f'al_algo_{i}']}",
-                                                                              device = st.session_state['device'])
-                            
-                            st.session_state[f'model_{i}.{j}'].init_training()
-                    else:
+            for i in range(1, st.session_state.n_models+1):
+        
+                if st.session_state[f'n_samp_mod_{i}']>1:
+                    min_bar = 0.5*(1+(i-1)/st.session_state.n_models)
+                    max_bar = 0.5*(1+i/st.session_state.n_models)
+                    
+                    for j in range(st.session_state[f'n_samp_mod_{i}']):
+                        
                         if st.session_state['fixed_data_init']:
-                            st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
+                            st.session_state[f'dataset_{i}.{j}'] = copy.deepcopy(st.session_state['dataset'])
+                        
                         else:
-                            st.session_state[f'dataset_{i}'] = AcLearnDataset(st.session_state.dataset_data_path,
+                            st.session_state[f'dataset_{i}.{j}'] = AcLearnDataset(st.session_state.dataset_data_path,
                                                                                     st.session_state.dataset_labels_path, 
                                                                                     size_init_per_class=2)
-
-                        st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
-                                                                      st.session_state[f'dataset_{i}'],
-                                                                      model_id = f"model_{i}_{st.session_state[f'al_algo_{i}']}",
-                                                                      device = st.session_state['device'])
                         
-                        st.session_state[f'model_{i}'].init_training()
+                        msg.markdown(f"<font color='gray'>init model_{i} [{j+1}/{st.session_state[f'n_samp_mod_{i}']}]", unsafe_allow_html=True)
+                        st.session_state[f'model_{i}.{j}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
+                                                                            st.session_state[f'dataset_{i}.{j}'],
+                                                                            model_id = f"model_{i}.{j}_{st.session_state[f'al_algo_{i}']}",
+                                                                            device = st.session_state['device'])
+                        
+                        progress_bar.progress(min_bar+(max_bar-min_bar)*(j+1)/2/st.session_state[f'n_samp_mod_{i}'])
+                        
+                        msg.markdown(f"<font color='gray'>init training model_{i} [{j+1}/{st.session_state[f'n_samp_mod_{i}']}]", unsafe_allow_html=True)
+                        st.session_state[f'model_{i}.{j}'].init_training()
+                        progress_bar.progress(min_bar+(max_bar-min_bar)*(j+1)/st.session_state[f'n_samp_mod_{i}'])
+                
+                else:
+                    if st.session_state['fixed_data_init']:
+                        st.session_state[f'dataset_{i}'] = copy.deepcopy(st.session_state['dataset'])
+                    else:
+                        st.session_state[f'dataset_{i}'] = AcLearnDataset(st.session_state.dataset_data_path,
+                                                                                st.session_state.dataset_labels_path, 
+                                                                                size_init_per_class=2)
+                    
+                    msg.markdown(f"<font color='gray'>init model_{i}", unsafe_allow_html=True)
+                    st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
+                                                                    st.session_state[f'dataset_{i}'],
+                                                                    model_id = f"model_{i}_{st.session_state[f'al_algo_{i}']}",
+                                                                    device = st.session_state['device'])
+                    progress_bar.progress(0.5*(1+i/2/st.session_state.n_models))
+                    
+                    msg.markdown(f"<font color='gray'>init training model_{i}", unsafe_allow_html=True)
+                    st.session_state[f'model_{i}'].init_training()
+                    progress_bar.progress(0.5*(1+i/st.session_state.n_models))
 
-                st.success('setup finished')
-                st.experimental_rerun()
-    
-            else:
-                st.error('missing some elements')
+            st.success('setup finished')
+            st.experimental_rerun()
+
+        else:
+            st.error('missing some elements')
