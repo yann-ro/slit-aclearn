@@ -36,6 +36,7 @@ def plot_accuracy():
     """
     
     fig, ax = plt.subplots()
+    colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
     ax.axhline(y=st.session_state['model_0'].max_accuracy,
                linestyle='--', c='r', label='max accuracy full dataset', alpha=0.5)
@@ -44,7 +45,7 @@ def plot_accuracy():
         if st.session_state[f'n_samp_mod_{i}']>1:
             plot_acc_variance(i)
         else:
-            ax.plot(st.session_state[f'model_{i}'].acc_history, label=f"acc model {i} ({st.session_state[f'al_algo_{i}']})")
+            ax.plot(st.session_state[f'model_{i}'].acc_history, color=colors[i], label=f"acc model {i} ({st.session_state[f'al_algo_{i}']})")
     
     plt.title('Accuracy on test set')
     plt.grid(alpha=0.3, linestyle='--')

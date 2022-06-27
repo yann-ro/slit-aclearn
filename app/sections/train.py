@@ -48,7 +48,7 @@ def train_window():
 def training(model_name, msg, progress_bar, tsne=True, pca=True):
 
     print(f"$({st.session_state[model_name].model_id}) train started")
-    msg.markdown("<center><font color='gray'>train..</center>", unsafe_allow_html=True)
+    msg.markdown("<center><font color='gray'>train</center>", unsafe_allow_html=True)
     st.session_state[model_name].active_learning_procedure(n_queries=st.session_state['n_epochs'], 
                                                             query_size=st.session_state['query_size'], 
                                                             train_acc=True,
@@ -57,16 +57,16 @@ def training(model_name, msg, progress_bar, tsne=True, pca=True):
     print(f"$({st.session_state[model_name].model_id}) train finished")
     
     if tsne:
-        msg.markdown(f"<center><font color='gray'>compute t-SNE..</center>", unsafe_allow_html=True)
+        msg.markdown(f"<center><font color='gray'>compute t-SNE</center>", unsafe_allow_html=True)
         st.session_state[model_name].compute_tsne()
         print(f"$({st.session_state[model_name].model_id}) tsne computed")
     
     if pca:
-        msg.markdown(f"<center><font color='gray'>compute PCA..</center>", unsafe_allow_html=True)
+        msg.markdown(f"<center><font color='gray'>compute PCA</center>", unsafe_allow_html=True)
         st.session_state[model_name].compute_pca()
         print(f"$({st.session_state[model_name].model_id}) pca computed")
 
-    msg.markdown(f"<center><font color='gray'>compute figure ...</center>", unsafe_allow_html=True)
+    msg.markdown(f"<center><font color='gray'>compute figure</center>", unsafe_allow_html=True)
     st.session_state[model_name].compute_emb_figure()
     print(f"$({st.session_state[model_name].model_id}) embedding figure computed")
 
