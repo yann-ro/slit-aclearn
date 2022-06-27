@@ -45,8 +45,8 @@ def plot_accuracy():
         if st.session_state[f'n_samp_mod_{i}']>1:
             plot_acc_variance(i)
         else:
-            x = st.session_state[f'model_{i}'].acc_history
-            y = np.arange(len(x))*st.session_state['query_size']
+            x = np.arange(len(x))*st.session_state['query_size']
+            y = st.session_state[f'model_{i}'].acc_history
             ax.plot(x, y, color=colors[i-1], label=f"acc model {i} ({st.session_state[f'al_algo_{i}']})")
     
     ax.set_xlabel('number of queries')
