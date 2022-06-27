@@ -4,14 +4,14 @@ Active learning benchmark interface. Developped as de demonstrator of active lea
 
 > start: `streamlit run app.py` 
 
-# to fix
+## to fix
 
-# to implement
+## to implement
 
 - manually labeled data (classification + semantic)
 - add unlabeled data
 
-# to improve
+## to improve
 
 - plotting t-sne/pca from features of nn.
 - plotting t-sne/pca with all data (unsupervised)
