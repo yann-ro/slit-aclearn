@@ -33,7 +33,7 @@ def train_window():
                     progress_bar[2] = min+(j+1)/st.session_state[f'n_samp_mod_{i}']*(max-min)
 
                     state.markdown(f"<center>model {i}/{st.session_state.n_models}<br>sample [{j+1}/{st.session_state[f'n_samp_mod_{i}']}]</center>", unsafe_allow_html=True)
-                    training(f'model_{i}.{j}', msg, progress_bar, tsne=False, pca=True)
+                    training(f'model_{i}.{j}', msg, progress_bar, tsne=(j==0), pca=True)
             
             else:
                 progress_bar[1] = (i-1)/st.session_state.n_models
