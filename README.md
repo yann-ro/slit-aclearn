@@ -13,4 +13,5 @@ Active learning benchmark interface. Developped as de demonstrator of active lea
 
 # to improve
 
--  plotting tsne/pca from features of nn.
+- plotting t-sne/pca from features of nn.
+- plotting t-sne/pca with all data (unsupervised)
