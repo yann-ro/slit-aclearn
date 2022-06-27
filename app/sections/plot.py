@@ -49,6 +49,8 @@ def plot_accuracy():
             y = np.arange(len(x))*st.session_state['query_size']
             ax.plot(x, y, color=colors[i-1], label=f"acc model {i} ({st.session_state[f'al_algo_{i}']})")
     
+    ax.set_xlabel('number of queries')
+    ax.set_ylabel('accuracy')
     plt.title('Accuracy on test set')
     plt.grid(alpha=0.3, linestyle='--')
     plt.legend()
@@ -63,15 +65,15 @@ def plot_acc_variance(i):
 
     acc = np.array([st.session_state[f'model_{i}.{j}'].acc_history for j in range(n_samp)])
     df = pd.DataFrame(acc, columns=np.arange(n_epochs)).melt()
-    df.rename(columns = {'variable':'accuracy', 'value':'number of queries'}, inplace = True)
-    df['number of queries'] *= st.session_state['query_size']
+    #df.rename(columns = {'variable':'accuracy', 'value':'number of queries'}, inplace = True)
+    df['variable'] *= st.session_state['query_size']
 
     colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
-    sns.lineplot(data=df, x='accuracy', y='number of queries', estimator=np.mean, ci='sd', color=colors[i-1], label=f"acc model {i} ({st.session_state[f'al_algo_{i}']}) [x{n_samp}]")
-    sns.lineplot(data=df, x='accuracy', y='number of queries', estimator=np.mean,  ci=50, color=colors[i-1])
-    sns.lineplot(data=df, x='accuracy', y='number of queries', estimator=np.min, linestyle='--', ci=None, color=colors[i-1], alpha=0.5)
-    sns.lineplot(data=df, x='accuracy', y='number of queries', estimator=np.max, linestyle='--', ci=None, color=colors[i-1], alpha=0.5)
+    sns.lineplot(data=df, x='variable', y='value', estimator=np.mean, ci='sd', color=colors[i-1], label=f"acc model {i} ({st.session_state[f'al_algo_{i}']}) [x{n_samp}]")
+    sns.lineplot(data=df, x='variable', y='value', estimator=np.mean,  ci=50, color=colors[i-1])
+    sns.lineplot(data=df, x='variable', y='value', estimator=np.min, linestyle='--', ci=None, color=colors[i-1], alpha=0.5)
+    sns.lineplot(data=df, x='variable', y='value', estimator=np.max, linestyle='--', ci=None, color=colors[i-1], alpha=0.5)
 
 
 
