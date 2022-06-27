@@ -184,7 +184,7 @@ def init_models():
                                                         device = st.session_state['device'])
 
             print('$(model_0) evaluate max accuracy...')
-            msg.markdown("<font color='gray'>evaluate max accuracy", unsafe_allow_html=True)
+            msg.markdown("<center>m<font color='gray'>evaluate max accuracy", unsafe_allow_html=True)
             st.session_state['model_0'].evaluate_max()
             progress_bar.progress(0.5)
             print('$(model_0) max accuracy calculated')
@@ -205,7 +205,7 @@ def init_models():
                                                                                     st.session_state.dataset_labels_path, 
                                                                                     size_init_per_class=2)
                         
-                        msg.markdown(f"<font color='gray'>init model_{i} [{j+1}/{st.session_state[f'n_samp_mod_{i}']}]", unsafe_allow_html=True)
+                        msg.markdown(f"<center><font color='gray'>init model_{i} [{j+1}/{st.session_state[f'n_samp_mod_{i}']}]", unsafe_allow_html=True)
                         st.session_state[f'model_{i}.{j}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
                                                                             st.session_state[f'dataset_{i}.{j}'],
                                                                             model_id = f"model_{i}.{j}_{st.session_state[f'al_algo_{i}']}",
@@ -213,7 +213,7 @@ def init_models():
                         
                         progress_bar.progress(min_bar+(max_bar-min_bar)*(j+1)/2/st.session_state[f'n_samp_mod_{i}'])
                         
-                        msg.markdown(f"<font color='gray'>init training model_{i} [{j+1}/{st.session_state[f'n_samp_mod_{i}']}]", unsafe_allow_html=True)
+                        msg.markdown(f"<center><font color='gray'>init training model_{i} [{j+1}/{st.session_state[f'n_samp_mod_{i}']}]", unsafe_allow_html=True)
                         st.session_state[f'model_{i}.{j}'].init_training()
                         progress_bar.progress(min_bar+(max_bar-min_bar)*(j+1)/st.session_state[f'n_samp_mod_{i}'])
                 
@@ -225,14 +225,14 @@ def init_models():
                                                                                 st.session_state.dataset_labels_path, 
                                                                                 size_init_per_class=2)
                     
-                    msg.markdown(f"<font color='gray'>init model_{i}", unsafe_allow_html=True)
+                    msg.markdown(f"<center><font color='gray'>init model_{i}", unsafe_allow_html=True)
                     st.session_state[f'model_{i}'] = AcLearnModel(st.session_state[f'al_algo_{i}'],
                                                                     st.session_state[f'dataset_{i}'],
                                                                     model_id = f"model_{i}_{st.session_state[f'al_algo_{i}']}",
                                                                     device = st.session_state['device'])
                     progress_bar.progress(0.5*(1+i/2/st.session_state.n_models))
                     
-                    msg.markdown(f"<font color='gray'>init training model_{i}", unsafe_allow_html=True)
+                    msg.markdown(f"<center><font color='gray'>init training model_{i}", unsafe_allow_html=True)
                     st.session_state[f'model_{i}'].init_training()
                     progress_bar.progress(0.5*(1+i/st.session_state.n_models))
 
