@@ -153,17 +153,18 @@ def modify_section_models():
             with cols[0]: 
                 st.markdown(f'**Model {i}**')
             with cols[1]: 
-                st.session_state[f'ml_algo_{i}'] = st.selectbox(f'ml algorithm', models_cl_names)
+                st.session_state[f'ml_algo_{i}'] = st.selectbox(f'ml algorithm', models_cl_names, key=f'algo_{i}')
                 display_explanation('algo_'+st.session_state[f'ml_algo_{i}'])
             
             with cols[2]: 
-                st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy', samp_names).lower()
+                st.session_state[f'al_algo_{i}'] = st.selectbox(f'sampling strategy', samp_names, key=f'samp_{i}').lower()
                 display_explanation('sampling_'+st.session_state[f'al_algo_{i}'])
 
             with cols[3]:
                 st.session_state[f'n_samp_mod_{i}'] = st.number_input(f'N samples for variance estimation', 
                                                                                 min_value=1, 
-                                                                                max_value=100)                
+                                                                                max_value=100,
+                                                                                key=f'nsamp_{i}')                
             st.markdown('---')
 
 
