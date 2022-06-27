@@ -184,7 +184,7 @@ def init_models():
                                                         device = st.session_state['device'])
 
             print('$(model_0) evaluate max accuracy...')
-            msg.markdown("<center>m<font color='gray'>evaluate max accuracy", unsafe_allow_html=True)
+            msg.markdown("<center><font color='gray'>evaluate max accuracy", unsafe_allow_html=True)
             st.session_state['model_0'].evaluate_max()
             progress_bar.progress(0.5)
             print('$(model_0) max accuracy calculated')
