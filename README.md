@@ -2,7 +2,7 @@
 
 Active learning benchmark interface. Developped as de demonstrator of active learning models.
 
-> launch it with: `streamlit run app.py` 
+> start: `streamlit run app.py` 
 
 # to fix
 
