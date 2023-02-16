@@ -1,4 +1,4 @@
-from aclearn.acquisition import uniform,max_entropy,bald,variation_ratio
+from aclearn.acquisition import uniform, max_entropy, bald, variation_ratio
 from sklearn.metrics import ConfusionMatrixDisplay
 from mlinsights.mlmodel import PredictableTSNE
 from sklearn.metrics import confusion_matrix
@@ -18,9 +18,10 @@ import numpy as np
 import torch
 
 
-class AcLearnModel():
-
-    def __init__(self, query_strategy, dataset, model_id, oracle='computer', device='cpu'):
+class AcLearnModel:
+    def __init__(
+        self, query_strategy, dataset, model_id, oracle="computer", device="cpu"
+    ):
         """
         query_strategy (func):
         is_oracle (bool):
@@ -28,26 +29,32 @@ class AcLearnModel():
 
         self.model_id = model_id
 
-        print(f'$({self.model_id}) init AcLearn model')
-        if query_strategy == 'random': self.query_strategy = uniform
-        elif query_strategy == 'max_entropy': self.query_strategy = max_entropy
-        elif query_strategy == 'bald': self.query_strategy = bald
-        elif query_strategy == 'var_ratio': self.query_strategy = variation_ratio
-        else : print('Not existing query_strategy')
+        print(f"$({self.model_id}) init AcLearn model")
+        if query_strategy == "random":
+            self.query_strategy = uniform
+        elif query_strategy == "max_entropy":
+            self.query_strategy = max_entropy
+        elif query_strategy == "bald":
+            self.query_strategy = bald
+        elif query_strategy == "var_ratio":
+            self.query_strategy = variation_ratio
+        else:
+            print("Not existing query_strategy")
 
         self.oracle = oracle
         self.dataset = dataset
 
-        self.estimator = NeuralNetClassifier(CNN,
-                                max_epochs=50,
-                                batch_size=128,
-                                lr=0.001,
-                                optimizer=torch.optim.Adam,
-                                criterion=torch.nn.CrossEntropyLoss,
-                                train_split=None,
-                                verbose=0,
-                                device=device)
-
+        self.estimator = NeuralNetClassifier(
+            CNN,
+            max_epochs=50,
+            batch_size=128,
+            lr=0.001,
+            optimizer=torch.optim.Adam,
+            criterion=torch.nn.CrossEntropyLoss,
+            train_split=None,
+            verbose=0,
+            device=device,
+        )
 
         self.acc_history = None
         self.max_accuracy = 0
@@ -59,120 +66,120 @@ class AcLearnModel():
         self.dataset.X_query = None
         self.dataset.y_query = None
 
-
     def evaluate_max(self):
-        """
-        """
+        """ """
 
         self.estimator.fit(self.dataset.X_train, self.dataset.y_train)
-        self.max_accuracy = self.estimator.score(self.dataset.X_test, self.dataset.y_test)
-
-
+        self.max_accuracy = self.estimator.score(
+            self.dataset.X_test, self.dataset.y_test
+        )
 
     def init_training(self):
-        """
-        """
+        """ """
 
-        self.learner = ActiveLearner(estimator=self.estimator,
-                                    X_training = self.dataset.X_init,
-                                    y_training = self.dataset.y_init,
-                                    query_strategy = self.query_strategy)
+        self.learner = ActiveLearner(
+            estimator=self.estimator,
+            X_training=self.dataset.X_init,
+            y_training=self.dataset.y_init,
+            query_strategy=self.query_strategy,
+        )
 
-        self.acc_history = [self.learner.score(self.dataset.X_test, self.dataset.y_test)]
-        self.acc_train_history = [self.learner.score(self.dataset.X_train, self.dataset.y_train)]
+        self.acc_history = [
+            self.learner.score(self.dataset.X_test, self.dataset.y_test)
+        ]
+        self.acc_train_history = [
+            self.learner.score(self.dataset.X_train, self.dataset.y_train)
+        ]
 
-        print(f'$({self.model_id}) init_training complete')
+        print(f"$({self.model_id}) init_training complete")
 
+    def active_learning_procedure(
+        self, n_queries=10, query_size=10, train_acc=False, progress_bar=None
+    ):
+        """ """
 
-
-    def active_learning_procedure(self, n_queries=10, query_size=10, train_acc=False, progress_bar=None):
-        """
-        """
-        
-        if self.oracle=='computer':
+        if self.oracle == "computer":
 
             for i in range(n_queries):
                 self.index_epoch += 1
                 self.forward(query_size, train_acc)
-                
+
                 if train_acc:
-                    print(f'\t(query {self.index_epoch}) Train acc: \t{self.acc_train_history[self.index_epoch]:0.4f}  |  Test acc: \t{self.acc_history[self.index_epoch]:0.4f}')
+                    print(
+                        f"\t(query {self.index_epoch}) Train acc: \t{self.acc_train_history[self.index_epoch]:0.4f}  |  Test acc: \t{self.acc_history[self.index_epoch]:0.4f}"
+                    )
                 else:
-                    print(f'\t(query {self.index_epoch}) Test acc: \t{self.acc_history[ self.index_epoch]:0.4f}')
-                
+                    print(
+                        f"\t(query {self.index_epoch}) Test acc: \t{self.acc_history[ self.index_epoch]:0.4f}"
+                    )
+
                 if progress_bar:
                     bar, min_bar, max_bar = progress_bar
-                    bar.progress(min_bar+(i+1)/n_queries*(max_bar-min_bar))
+                    bar.progress(min_bar + (i + 1) / n_queries * (max_bar - min_bar))
 
-        elif self.oracle=='human':
-            print('MODE not implemented yet')
+        elif self.oracle == "human":
+            print("MODE not implemented yet")
             self.index_epoch += 1
 
-
-
     def forward(self, query_size, train_acc):
-        """
-        """
+        """ """
 
         query_idx, query_instance = self.learner.query(self.dataset.X_pool, query_size)
 
         self.X_query = self.dataset.X_pool[query_idx]
         self.y_query = self.dataset.y_pool[query_idx]
-        
+
         self.learner.teach(self.X_query, self.y_query)
         self.dataset.X_pool = np.delete(self.dataset.X_pool, query_idx, axis=0)
         self.dataset.y_pool = np.delete(self.dataset.y_pool, query_idx, axis=0)
-        
-        self.acc_history.append(self.learner.score(self.dataset.X_test, self.dataset.y_test))
 
-        if train_acc: 
-            self.acc_train_history.append(self.learner.score(self.dataset.X_train, self.dataset.y_train))
-    
+        self.acc_history.append(
+            self.learner.score(self.dataset.X_test, self.dataset.y_test)
+        )
 
+        if train_acc:
+            self.acc_train_history.append(
+                self.learner.score(self.dataset.X_train, self.dataset.y_train)
+            )
 
-    def plot_confusion(self, labels=None, normalize=None, ax=None, cmap='viridis'):
-        return ConfusionMatrixDisplay.from_estimator(self.learner.estimator, 
-                                                    self.dataset.X_test, 
-                                                    self.dataset.y_test, 
-                                                    labels=labels, 
-                                                    normalize=normalize, 
-                                                    ax=ax, 
-                                                    cmap=cmap)
-
-
+    def plot_confusion(self, labels=None, normalize=None, ax=None, cmap="viridis"):
+        return ConfusionMatrixDisplay.from_estimator(
+            self.learner.estimator,
+            self.dataset.X_test,
+            self.dataset.y_test,
+            labels=labels,
+            normalize=normalize,
+            ax=ax,
+            cmap=cmap,
+        )
 
     def evaluate_confusion(self):
-        """
-        """
+        """ """
 
         y_pred = self.learner.predict(self.dataset.X_test)
-        return confusion_matrix(self.dataset.y_test, y_pred, labels=None, sample_weight=None, normalize=None)
-
-
+        return confusion_matrix(
+            self.dataset.y_test, y_pred, labels=None, sample_weight=None, normalize=None
+        )
 
     def compute_tsne(self):
-        """
-        """
+        """ """
         X = self.learner.X_training.reshape(len(self.learner.X_training), -1)
         y = self.learner.y_training
 
-        self.tsne = PredictableTSNE(transformer=TSNE(n_iter=1000, init='pca', learning_rate='auto'))
+        self.tsne = PredictableTSNE(
+            transformer=TSNE(n_iter=1000, init="pca", learning_rate="auto")
+        )
         self.tsne.fit(X, y)
-    
-    
 
     def compute_pca(self):
-        """
-        """
+        """ """
         X = self.learner.X_training.reshape(len(self.learner.X_training), -1)
         y = self.learner.y_training
 
         self.pca = PCA().fit(X, y)
 
-    
     def compute_emb_figure(self):
-        """
-        """
+        """ """
 
         X_train = self.learner.X_training.reshape(len(self.learner.X_training), -1)
         y_train = self.learner.y_training
@@ -180,47 +187,41 @@ class AcLearnModel():
         y_query = self.y_query
         X_pool = self.dataset.X_pool.reshape(len(self.dataset.X_pool), -1)
 
-        self.emb_fig = plot_results(X_train, 
-                                    y_train, 
-                                    X_query, 
-                                    y_query, 
-                                    X_pool, 
-                                    tsne=self.tsne, 
-                                    pca=self.pca
-                                    )
+        self.emb_fig = plot_results(
+            X_train, y_train, X_query, y_query, X_pool, tsne=self.tsne, pca=self.pca
+        )
 
 
+def confidence_ellipse(x2d, labels, ax, n_std=2.0, cm="none", **kwargs):
+    """ """
 
-
-def confidence_ellipse(x2d, labels, ax, n_std=2.0, cm='none', **kwargs):
-    """
-    """
-    
     classes = set(labels)
     colors = cm(np.linspace(0, 1, len(classes)))
 
     ellipses = []
-    
+
     for c, color in zip(classes, colors):
 
-        x, y = x2d[labels==c, 0], x2d[labels==c, 1]
+        x, y = x2d[labels == c, 0], x2d[labels == c, 1]
 
         if x.size != y.size:
             raise ValueError("x and y must be the same size")
 
         cov = np.cov(x, y)
-        pearson = cov[0, 1]/np.sqrt(cov[0, 0] * cov[1, 1])
+        pearson = cov[0, 1] / np.sqrt(cov[0, 0] * cov[1, 1])
         # Using a special case to obtain the eigenvalues of this
         # two-dimensionl dataset.
         ell_radius_x = np.sqrt(1 + pearson)
         ell_radius_y = np.sqrt(1 - pearson)
-        ellipse = Ellipse((0, 0),
+        ellipse = Ellipse(
+            (0, 0),
             width=ell_radius_x * 2,
             height=ell_radius_y * 2,
-            edgecolor='white',
+            edgecolor="white",
             facecolor=color,
             linewidth=3,
-            **kwargs)
+            **kwargs,
+        )
 
         # Calculating the stdandard deviation of x from
         # the squareroot of the variance and multiplying
@@ -232,26 +233,26 @@ def confidence_ellipse(x2d, labels, ax, n_std=2.0, cm='none', **kwargs):
         scale_y = np.sqrt(cov[1, 1]) * n_std
         mean_y = np.mean(y)
 
-        transf = transforms.Affine2D() \
-            .rotate_deg(45) \
-            .scale(scale_x, scale_y) \
+        transf = (
+            transforms.Affine2D()
+            .rotate_deg(45)
+            .scale(scale_x, scale_y)
             .translate(mean_x, mean_y)
+        )
 
         ellipse.set_transform(transf + ax.transData)
         ellipses.append(ellipse)
 
         ax.add_patch(ellipse)
-    
+
     ax.legend(ellipses, classes)
 
 
-
 def plot_results(X_train, y_train, X_selected, y_selected, X_pool, tsne=None, pca=None):
-    """
-    """
-    
+    """ """
+
     fig, ax = plt.subplots(2, 1, figsize=(10, 20))
-    
+
     if tsne:
         x2d_train_tsne = tsne.transform(X_train)
         x2d_selected_tsne = tsne.transform(X_selected)
@@ -262,24 +263,33 @@ def plot_results(X_train, y_train, X_selected, y_selected, X_pool, tsne=None, pc
         # x_min_lim = 2*x2d_train_tsne[0].min()
         # y_min_lim = 2*x2d_train_tsne[1].min()
 
+        confidence_ellipse(
+            x2d_train_tsne, y_train, ax[0], n_std=2, cm=cm.magma, alpha=0.4
+        )
 
-        confidence_ellipse(x2d_train_tsne, y_train, ax[0], n_std=2, cm=cm.magma, alpha=0.4)
-        
-        ax[0].scatter(x2d_pool_tsne[:,0], x2d_pool_tsne[:,1], color='gray', alpha=0.05)
-        ax[0].scatter(x2d_selected_tsne[:,0], x2d_selected_tsne[:,1], c=y_selected, cmap='magma')
-        ax[0].set_title('t-SNE')
-        #ax[0].set_xlim(x_min_lim, x_max_lim)
-        #ax[0].set_ylim(y_min_lim, y_max_lim)
+        ax[0].scatter(
+            x2d_pool_tsne[:, 0], x2d_pool_tsne[:, 1], color="gray", alpha=0.05
+        )
+        ax[0].scatter(
+            x2d_selected_tsne[:, 0], x2d_selected_tsne[:, 1], c=y_selected, cmap="magma"
+        )
+        ax[0].set_title("t-SNE")
+        # ax[0].set_xlim(x_min_lim, x_max_lim)
+        # ax[0].set_ylim(y_min_lim, y_max_lim)
 
     if pca:
         x2d_train_pca = pca.transform(X_train)
         x2d_selected_pca = pca.transform(X_selected)
         x2d_pool_pca = pca.transform(X_pool)
 
-        confidence_ellipse(x2d_train_pca, y_train, ax[1], n_std=2, cm=cm.magma, alpha=0.4)
-        
-        ax[1].scatter(x2d_pool_pca[:,0], x2d_pool_pca[:,1], color='gray', alpha=0.05)
-        ax[1].scatter(x2d_selected_pca[:,0], x2d_selected_pca[:,1], c=y_selected, cmap='magma')
-        ax[1].set_title('PCA')
+        confidence_ellipse(
+            x2d_train_pca, y_train, ax[1], n_std=2, cm=cm.magma, alpha=0.4
+        )
+
+        ax[1].scatter(x2d_pool_pca[:, 0], x2d_pool_pca[:, 1], color="gray", alpha=0.05)
+        ax[1].scatter(
+            x2d_selected_pca[:, 0], x2d_selected_pca[:, 1], c=y_selected, cmap="magma"
+        )
+        ax[1].set_title("PCA")
 
     return fig
